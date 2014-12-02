@@ -18,11 +18,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     Node.cpp \
     Tree.cpp \
-    Handlein.cpp \
+    HandleFile.cpp \
     listarray.cpp
 
 HEADERS += \
     Node.h \
     Tree.h \
-    Handlein.h \
+    HandleFile.h \
     ListArray.h

@@ -1,4 +1,4 @@
-#include "Handlein.h"
+#include "HandleFile.h"
 #include "Node.h"
 #include "ListArray.h"
 #include <fstream>
@@ -6,17 +6,17 @@
 
 
 
-handleIn::handleIn()
+HandleFile::HandleFile()
 {
 
 
 }
 
-handleIn::~handleIn()
+HandleFile::~HandleFile()
 {
 
 }
-ListArray handleIn::openFile(){
+ListArray HandleFile::openFile(){
     std::ifstream is ("test", std::ifstream::binary);
     ListArray list;
     if(is){

@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "Node.h"
 #include <fstream>
-#include "Handlein.h"
+#include "HandleFile.h"
 #include "ListArray.h"
 #include "Node.h"
 
@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     qDebug()<<"COMEÇO";
-    handleIn file;
+    HandleFile file;
     ListArray list = file.openFile();
 //    list.sort();
     list.show();

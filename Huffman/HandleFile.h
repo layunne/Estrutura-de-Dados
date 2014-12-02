@@ -1,5 +1,5 @@
-#ifndef HANDLEIN_H
-#define HANDLEIN_H
+#ifndef HANDLEFILE_H
+#define HANDLEFILE_H
 
 #include <Node.h>
 #include <fstream>
@@ -7,12 +7,12 @@
 
 using std::fstream;
 
-class handleIn
+class HandleFile
 {
 private:
 public:
-    handleIn();
-    ~handleIn();
+    HandleFile();
+    ~HandleFile();
      ListArray openFile();
 
 
@@ -20,4 +20,4 @@ public:
 
 };
 
-#endif // HANDLEIN_H
+#endif // HANDLEFILE_H
