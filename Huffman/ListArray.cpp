@@ -30,9 +30,8 @@ void ListArray::insert(int  weight, unsigned char content){
 }
 
 void ListArray::append(int  weight, unsigned char content){
-    listArray[lengthList] = new Node(weight, content);
-    ++lengthList;
-
+    Node* node = new Node(weight, content);
+    listArray[lengthList++] = node;
 }
 
 Node* ListArray::remove(){

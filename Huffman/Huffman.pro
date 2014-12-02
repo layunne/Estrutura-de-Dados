@@ -19,7 +19,7 @@ SOURCES += main.cpp \
     Node.cpp \
     Tree.cpp \
     HandleFile.cpp \
-    listarray.cpp
+    ListArray.cpp
 
 HEADERS += \
     Node.h \

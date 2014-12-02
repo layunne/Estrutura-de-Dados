@@ -4,16 +4,22 @@
 #include <Node.h>
 #include <fstream>
 #include "ListArray.h"
+#include <QList>
 
 using std::fstream;
 
 class HandleFile
 {
 private:
+    ListArray* list;
+    QList<Node*> qList;
+
 public:
     HandleFile();
     ~HandleFile();
-     ListArray openFile();
+    QList<Node*>& openFile2();
+    ListArray* openFile();
+
 
 
 
