@@ -1,50 +1,37 @@
+#include "Node.h"
+#include "HandleFile.h"
+#include "list.h"
+#include "Tree.h"
+#include "ByteArray.h"
 #include <iostream>
 #include <QDebug>
-#include "Node.h"
 #include <fstream>
-#include "HandleFile.h"
-#include "ListArray.h"
-#include "Node.h"
 #include <stdlib.h>
 #include <QList>
+#include <QBitArray>
+#include <QByteArray>
+#include <string>
 
 
 using namespace std;
 
-int comparar(const void *a, const void *b){
-  return(*(int*)a - *(int*)b);
-}
-bool caseInsensitiveLessThan(Node* &n1, Node* &n2)
- {
-    if(n1->getWeight() == n2->getWeight()){
-        return n1->getContent() < n2->getContent();
-    }
-     return n1->getWeight() < n2->getWeight();
- }
-
-int main()
+int main(int argc, char* argv[])
 {
     qDebug()<<"COMEÇO";
     HandleFile file;
-   ListArray* list;
-    list = file.openFile();
-//    list->sort();
-    list->show();
+    file.SetIO(argv[1], argv[1]);
+    List *list = new List();
+    file.openFile();
+    file.count(list);
 
-    QList<Node*> lista;
-    lista = file.openFile2();
-//    for(int i = 0; i < 5; ++i);
-//    int valores[] = {0, 4 , 2, 3 , 1};
-//    qsort(valores, 5, sizeof(int), comparar);
-
-//    for(int i = 0; i < 5; ++i){
-//        qDebug() << valores[i];
-//    }
-    qSort(lista.begin(), lista.end(), caseInsensitiveLessThan);
-    for(int i = 0; i < lista.length(); ++i){
-        qDebug() << lista.at(i)->getWeight() << hex << lista.at(i)->getContent();
-    }
-
+    Tree tree;
+    tree.buildTree(list);
+//    tree.showTree(tree.getRoot());
+    tree.encoding(tree.getRoot());
+//    tree.codeTree(tree.getRoot());
+    tree.showCodeLeaf(tree.getRoot());
+//    tree.showListNodes();
+    file.codeBory(tree.listNodes());
     qDebug()<<"FIM";
 
     return 0;

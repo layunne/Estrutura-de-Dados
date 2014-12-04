@@ -19,10 +19,12 @@ SOURCES += main.cpp \
     Node.cpp \
     Tree.cpp \
     HandleFile.cpp \
-    ListArray.cpp
+    list.cpp \
+    ByteArray.cpp
 
 HEADERS += \
     Node.h \
     Tree.h \
     HandleFile.h \
-    ListArray.h
+    list.h \
+    ByteArray.h

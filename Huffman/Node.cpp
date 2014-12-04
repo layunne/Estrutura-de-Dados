@@ -1,28 +1,72 @@
 #include "Node.h"
+#include <QDebug>
 
 Node::Node(){
-    left = 0;
-    right = 0;
-    parent = 0;
+    _left = NULL;
+    _right = NULL;
+    _dad = NULL;
+    _isLeaf = true;
+//    _code = 0;
 }
-Node::Node(int  w, unsigned char c){
-    left = 0;
-    right = 0;
-    weight = w;
-    content = c;
+Node::Node(bool isLeaf,int  weight, unsigned char content){
+    _left = NULL;
+    _right = NULL;
+    _dad = NULL;
+    _weight = weight;
+    _content = content;
+    _isLeaf = isLeaf;
+//    _code = 0;
+}
+
+bool Node::isLeaf()
+{
+    return _isLeaf;
+}
+
+QString Node::getCode()
+{
+    return _code;
 }
 unsigned char Node::getContent(){
-    return content;
+    return _content;
+}
+
+Node *Node::getDad()
+{
+    return _dad;
 }
 int Node::getWeight(){
-    return weight;
+    return _weight;
 }
-Node* Node::getLeftChild(){
-    return left;
+
+void Node::setDad(Node *dad)
+{
+    _dad = dad;
 }
-void Node::setLeftChild(Node* l){
-    right = l;
+Node *Node::getLeftChild(){
+    return _left;
 }
-void Node::setRightChild(Node* r){
-    right = r;
+Node *Node::getRightChild(){
+    return _right;
+}
+
+void Node::setCode(QString code)
+{
+    _code += code;
+}
+
+void Node::setChilds(Node *left, Node *right)
+{
+    _left = left;
+    _right = right;
+}
+void Node::setLeftChild(Node *left){
+    _left = left;
+}
+void Node::setRightChild(Node *right){
+    _right = right;
+}
+void Node::setWeight(int weight)
+{
+    _weight = weight;
 }

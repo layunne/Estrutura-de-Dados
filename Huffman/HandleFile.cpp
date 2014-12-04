@@ -1,16 +1,16 @@
 #include "HandleFile.h"
 #include "Node.h"
-#include "ListArray.h"
 #include <fstream>
 #include <QDebug>
 #include <QList>
 
 
-
+using std::ifstream;
+using namespace std;
 HandleFile::HandleFile()
 {
-    list = new ListArray;
-
+    buffer = NULL;
+    lengthB = 0;
 }
 
 HandleFile::~HandleFile()
@@ -18,106 +18,95 @@ HandleFile::~HandleFile()
 
 }
 
-QList<Node*>& HandleFile::openFile2()
+void HandleFile::buildFileOut(char code[])
 {
-    std::ifstream is ("test", std::ifstream::binary);
-    if(is){
+    fileOut.open(_pathOut, ios::out | ios::binary | ios::app);
+    fileOut.write(code,sizeof(code));
+}
+
+void HandleFile::openFile()
+{
+    // Abre o Arquivo de entrada
+    fileIn.open(_pathIn, ios::in | ios::binary);
+
+    if(fileIn){
         // Pega o tamanho do Arquivo
-        is.seekg(0, is.end);
-        int length = is.tellg();
-        length = is.tellg();
-        is.seekg(0,is.beg);
+        fileIn.seekg(0, fileIn.end);
+        lengthB = fileIn.tellg();
+        fileIn.seekg(0,fileIn.beg);
 
         // Aloca a memória
-       char* buffer = new char [length];
+       buffer = new char [lengthB];
 
         //Ler dados
-        is.read (buffer,length);
+        fileIn.read (buffer,lengthB);
 
         // fecha arquivo
-        is.close();
+        fileIn.close();
+    } else {
+        qDebug() << "ARQUIVO NÃO ENCONTRADO";
+    }
+}
 
-        // Contar Peso
-        unsigned char array[256][2] = {0};
-        int lengthArray = 0;
-        for(int i = 0; i < length; ++i){
-            bool stop = true;
-            for(int j = 0; stop; ++j){
-                if(buffer[i] == array[j][0]){
-                    ++array[j][1];
-                    stop = false;
-                }
-                else if(!array[j][0]){
-                    array[j][0] = buffer[i];
-                    ++array[j][1];
-                    ++lengthArray;
-                    stop = false;
-                }
+void HandleFile::SetIO(char *pathIn, char *pathOut)
+{
+    _pathIn = pathIn;
+    _pathOut = pathOut;
+}
+char *HandleFile::getBuffer() const
+{
+    return buffer;
+}
+
+int HandleFile::getLengthB() const
+{
+    return lengthB;
+}
+
+void HandleFile::count(List *list)
+{
+
+    unsigned char array[256][2] = {0};
+
+    int lengthArray = 0;
+
+    for(int i = 0; i < lengthB; ++i){
+        bool stop = true;
+        for(int j = 0; stop; ++j){
+            if(buffer[i] == array[j][0]){
+                ++array[j][1];
+                stop = false;
+            }
+            else if(!array[j][0]){
+                array[j][0] = buffer[i];
+                ++array[j][1];
+                ++lengthArray;
+                stop = false;
             }
         }
-//        for(int i = 0; i < length; ++i){
-//            qDebug() << buffer[i] << i;
-//        }
-
-        delete[] buffer;
-
-        // para ListArray
-        for(int i = 0; i < lengthArray; ++i){
-            qDebug() << i;
-            Node* node = new Node(array[i][1], array[i][0]);
-            qList.append(node);
-        }
     }
-    return qList;
-
-}
-ListArray* HandleFile::openFile(){
-    std::ifstream is ("test", std::ifstream::binary);
-    if(is){
-        // Pega o tamanho do Arquivo
-        is.seekg(0, is.end);
-        int length = is.tellg();
-        length = is.tellg();
-        is.seekg(0,is.beg);
-
-        // Aloca a memória
-       char* buffer = new char [length];
-
-        //Ler dados
-        is.read (buffer,length);
-
-        // fecha arquivo
-        is.close();
-
-        // Contar Peso
-        unsigned char array[256][2] = {0};
-        int lengthArray = 0;
-        for(int i = 0; i < length; ++i){
-            bool stop = true;
-            for(int j = 0; stop; ++j){
-                if(buffer[i] == array[j][0]){
-                    ++array[j][1];
-                    stop = false;
-                }
-                else if(!array[j][0]){
-                    array[j][0] = buffer[i];
-                    ++array[j][1];
-                    ++lengthArray;
-                    stop = false;
-                }
-            }
-        }
-
-        delete[] buffer;
-
-        // para ListArray
-        for(int i = 0; i < lengthArray; ++i){
-            list->append((int)array[i][1], array[i][0]);
-
-        }
+    for(int i = 0; i < lengthArray; ++i){
+        Node *node = new Node(true, array[i][1], array[i][0]);
+        list->append(node);
     }
-    return list;
-
 }
+
+void HandleFile::show() const
+{
+    for(int i = 0; i < lengthB; ++i){
+        qDebug() << i << hex << (unsigned char)buffer[i];
+    }
+}
+
+void HandleFile::codeBory(QString *list)
+{
+    for(int i = 0; i < lengthB; ++i){
+        _bodyFile += list[(int)buffer[i]];
+    }
+    for(int i = 0; i < _bodyFile.length(); ++i){
+        qDebug() << _bodyFile.at(i);
+    }
+}
+
 
 
