@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 //    tree.codeTree(tree.getRoot());
     tree.showCodeLeaf(tree.getRoot());
 //    tree.showListNodes();
-    file.codeBory(tree.listNodes());
+    file.codeBody(tree.listNodes());
     qDebug()<<"FIM";
 
     return 0;

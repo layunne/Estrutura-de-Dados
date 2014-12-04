@@ -51,7 +51,7 @@ public:
     void show() const;
 
     // Geta o arquivo pré-codificado
-    void codeBory(QString *list);
+    void codeBody(QString *list);
 
 };
 

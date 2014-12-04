@@ -98,7 +98,7 @@ void HandleFile::show() const
     }
 }
 
-void HandleFile::codeBory(QString *list)
+void HandleFile::codeBody(QString *list)
 {
     for(int i = 0; i < lengthB; ++i){
         _bodyFile += list[(int)buffer[i]];
