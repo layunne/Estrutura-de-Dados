@@ -20,11 +20,13 @@ SOURCES += main.cpp \
     Tree.cpp \
     HandleFile.cpp \
     list.cpp \
-    ByteArray.cpp
+    ByteArray.cpp \
+    auxiliar.cpp
 
 HEADERS += \
     Node.h \
     Tree.h \
     HandleFile.h \
     list.h \
-    ByteArray.h
+    ByteArray.h \
+    auxiliar.h

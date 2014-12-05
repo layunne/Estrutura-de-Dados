@@ -39,9 +39,9 @@ Node *List::getValue(int pos)
     return list.value(pos);
 }
 
-int List::length()
+int List::size()
 {
-    return list.length();
+    return list.size();
 }
 
 void List::moveToEnd()

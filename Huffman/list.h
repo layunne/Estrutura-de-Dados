@@ -33,7 +33,7 @@ public:
     void insert(Node *node);
 
     // Retorna o tamanho atual da lista
-    int length();
+    int size();
 
     // Move o Cursor para a ultima posição
     void moveToEnd();

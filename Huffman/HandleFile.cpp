@@ -3,14 +3,17 @@
 #include <fstream>
 #include <QDebug>
 #include <QList>
+#include <QFile>
+#include <QByteArray>
 
 
 using std::ifstream;
 using namespace std;
+
+
 HandleFile::HandleFile()
 {
-    buffer = NULL;
-    lengthB = 0;
+    _sizeCode = 0;
 }
 
 HandleFile::~HandleFile()
@@ -18,34 +21,42 @@ HandleFile::~HandleFile()
 
 }
 
-void HandleFile::buildFileOut(char code[])
+long long int HandleFile::sizeCode() const
 {
-    fileOut.open(_pathOut, ios::out | ios::binary | ios::app);
-    fileOut.write(code,sizeof(code));
+    return _sizeCode;
+}
+void HandleFile::appendFileOut(QByteArray code)
+{
+    QFile file(_pathOut);
+    if (!file.open(QIODevice::WriteOnly)) return;
+    file.write(code);
+    file.close();
 }
 
-void HandleFile::openFile()
+void HandleFile::openFile(List &list)
 {
     // Abre o Arquivo de entrada
-    fileIn.open(_pathIn, ios::in | ios::binary);
-
-    if(fileIn){
-        // Pega o tamanho do Arquivo
-        fileIn.seekg(0, fileIn.end);
-        lengthB = fileIn.tellg();
-        fileIn.seekg(0,fileIn.beg);
-
-        // Aloca a memória
-       buffer = new char [lengthB];
-
-        //Ler dados
-        fileIn.read (buffer,lengthB);
-
-        // fecha arquivo
-        fileIn.close();
-    } else {
-        qDebug() << "ARQUIVO NÃO ENCONTRADO";
+    QFile file(_pathIn);
+    if(!file.open(QIODevice::ReadOnly)){
+        qDebug() << "The file could not be read";
     }
+
+    // Ler a Entrada e contar as Ocorrências
+    int count[256] = {0};
+    while(!file.atEnd()){
+        QByteArray line = file.readLine(1024);
+        buffer.append(line);
+        for(int i = 0; i < line.size(); ++i) {
+            ++count[(unsigned char) line.at(i)];
+        }
+    }
+    for(int i = 0; i < 256; ++i) {
+        if(count[i]) {
+            Node *node = new Node(true, count[i], i);
+            list.append(node);
+        }
+    }
+    file.close();
 }
 
 void HandleFile::SetIO(char *pathIn, char *pathOut)
@@ -53,59 +64,37 @@ void HandleFile::SetIO(char *pathIn, char *pathOut)
     _pathIn = pathIn;
     _pathOut = pathOut;
 }
-char *HandleFile::getBuffer() const
+QByteArray HandleFile::getBuffer() const
 {
     return buffer;
 }
 
-int HandleFile::getLengthB() const
-{
-    return lengthB;
-}
-
-void HandleFile::count(List *list)
-{
-
-    unsigned char array[256][2] = {0};
-
-    int lengthArray = 0;
-
-    for(int i = 0; i < lengthB; ++i){
-        bool stop = true;
-        for(int j = 0; stop; ++j){
-            if(buffer[i] == array[j][0]){
-                ++array[j][1];
-                stop = false;
-            }
-            else if(!array[j][0]){
-                array[j][0] = buffer[i];
-                ++array[j][1];
-                ++lengthArray;
-                stop = false;
-            }
-        }
-    }
-    for(int i = 0; i < lengthArray; ++i){
-        Node *node = new Node(true, array[i][1], array[i][0]);
-        list->append(node);
-    }
-}
-
 void HandleFile::show() const
 {
-    for(int i = 0; i < lengthB; ++i){
-        qDebug() << i << hex << (unsigned char)buffer[i];
+    for(int i = 0; i < buffer.size(); ++i){
+        qDebug() << i
+                 << (char)buffer[i]
+                 << hex << (unsigned char)buffer[i];
     }
 }
 
 void HandleFile::codeBody(QString *list)
 {
-    for(int i = 0; i < lengthB; ++i){
-        _bodyFile += list[(int)buffer[i]];
+    for(int i = 0; i < buffer.size(); ++i){
+//        qDebug() << "EU" << i << (char)buffer[i];
+        for(int j = 0; j < list[buffer[i]].size(); ++j){
+            bool bit = true;
+            if(list[buffer[i]][j] == '0') bit = false;
+            _bodyFile.setBit(_sizeCode, bit);
+            ++_sizeCode;
+        }
+
     }
-    for(int i = 0; i < _bodyFile.length(); ++i){
-        qDebug() << _bodyFile.at(i);
-    }
+}
+
+QByteArray HandleFile::getCodeBody()
+{
+    return _bodyFile.getByteArray();
 }
 
 

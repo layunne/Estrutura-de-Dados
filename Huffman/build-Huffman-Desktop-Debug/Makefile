@@ -50,13 +50,15 @@ SOURCES       = ../main.cpp \
 		../Tree.cpp \
 		../HandleFile.cpp \
 		../list.cpp \
-		../ByteArray.cpp 
+		../ByteArray.cpp \
+		../auxiliar.cpp 
 OBJECTS       = main.o \
 		Node.o \
 		Tree.o \
 		HandleFile.o \
 		list.o \
-		ByteArray.o
+		ByteArray.o \
+		auxiliar.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -118,7 +120,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Tree.cpp \
 		../HandleFile.cpp \
 		../list.cpp \
-		../ByteArray.cpp
+		../ByteArray.cpp \
+		../auxiliar.cpp
 QMAKE_TARGET  = Huffman
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Huffman
@@ -275,7 +278,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Huffman1.0.0 || mkdir -p .tmp/Huffman1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Node.h ../Tree.h ../HandleFile.h ../list.h ../ByteArray.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../Node.cpp ../Tree.cpp ../HandleFile.cpp ../list.cpp ../ByteArray.cpp .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Node.h ../Tree.h ../HandleFile.h ../list.h ../ByteArray.h ../auxiliar.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../Node.cpp ../Tree.cpp ../HandleFile.cpp ../list.cpp ../ByteArray.cpp ../auxiliar.cpp .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
 
 
 clean:compiler_clean 
@@ -315,6 +318,7 @@ compiler_clean:
 main.o: ../main.cpp ../Node.h \
 		../HandleFile.h \
 		../list.h \
+		../ByteArray.h \
 		../Tree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
@@ -324,12 +328,14 @@ Node.o: ../Node.cpp ../Node.h
 Tree.o: ../Tree.cpp ../Tree.h \
 		../Node.h \
 		../list.h \
-		../HandleFile.h
+		../HandleFile.h \
+		../ByteArray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Tree.o ../Tree.cpp
 
 HandleFile.o: ../HandleFile.cpp ../HandleFile.h \
 		../Node.h \
-		../list.h
+		../list.h \
+		../ByteArray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o HandleFile.o ../HandleFile.cpp
 
 list.o: ../list.cpp ../list.h \
@@ -338,6 +344,10 @@ list.o: ../list.cpp ../list.h \
 
 ByteArray.o: ../ByteArray.cpp ../ByteArray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ByteArray.o ../ByteArray.cpp
+
+auxiliar.o: ../auxiliar.cpp ../auxiliar.h \
+		../ByteArray.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o auxiliar.o ../auxiliar.cpp
 
 ####### Install
 

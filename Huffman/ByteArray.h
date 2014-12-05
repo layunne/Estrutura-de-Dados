@@ -10,14 +10,27 @@ private:
 public:
     ByteArray();
 
+    // Adiciona um Byte na ultima Posição
+    void appendByte(char byte);
+
     // Retorna o char na posição dada
-    char getByteArray(int i) const;
+    char getByte(int i);
 
-    // Set um Bit na posição dada no Byte na posição dada dado
-    void setBit(int iByte, int iBit, bool bit = true);
+    // Restorna todo o byteArray
+    QByteArray getByteArray();
 
-    // Set um Byte na posição dada
-    void setByte(int i, char byte);
+    // Insere um Bit na posição dada no Byte na posição dada dado
+    void setBit(long long int iBit, bool bit = true);
+
+    // Insere um Byte na posição dada
+    void setByte(long long int i, char byte);
+    void setByte(long long int i, QByteArray byte);
+
+
+    // Retorna o Tamanho
+    int size();
+
+    int show(int i);
 
 };
 

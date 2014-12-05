@@ -9,16 +9,16 @@ Tree::Tree()
     root = NULL;
     _listNodes = new QString[256];
 }
-void Tree::buildTree(List *list)
+void Tree::buildTree(List &list)
 {
-    while(list->length() > 1){
-        list->sort();
+    while(list.size() > 1){
+        list.sort();
         Node *node = new Node(false, 0, 0);
-        node->setWeight(list->getValue(0)->getWeight() + list->getValue(1)->getWeight());
-        node->setChilds(list->remove(0),list->remove(1));
-        list->append(node);
+        node->setWeight(list.getValue(0)->getWeight() + list.getValue(1)->getWeight());
+        node->setChilds(list.remove(0),list.remove(1));
+        list.append(node);
     }
-    root = list->getBegin();
+    root = list.getBegin();
 }
 
 QString Tree::getcodeTree()
@@ -41,8 +41,8 @@ void Tree::encoding(Node *base)
 
 
     // Codificando os Nós
-    if(n1) n1->setCode(codeBase + "0");
-    if(n2) n2->setCode(codeBase + "1");
+    if(n1) n1->setCode(codeBase + '0');
+    if(n2) n2->setCode(codeBase + '1');
 
     // Construindo Código da Árvore
     if(base->isLeaf() == false){
@@ -79,8 +79,9 @@ void Tree::showCodeLeaf(Node *base)
 
 void Tree::showListNodes()
 {
-   for(int i = 0; i < 255; ++i){
-       qDebug() << _listNodes[i];
+   for(int i = 0; i < 256; ++i){
+       if(_listNodes[i] != "")qDebug() << _listNodes[i]
+                                       <<  (char)i;
    }
 }
 

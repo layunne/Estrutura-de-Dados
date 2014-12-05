@@ -22,7 +22,7 @@ private:
 public:
     Tree();
     // Constroi a Arvore de Huffmam
-    void buildTree(List *list);
+    void buildTree(List &list);
 
     // Retorna o Código da Árvore
     QString getcodeTree();
