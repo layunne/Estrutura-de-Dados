@@ -18,43 +18,26 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
     qDebug()<<"------COMEÇO-----";
+    QList<QString> arg;
+    for(int i = 0; argv[i]; ++i){
+        arg += argv[i];
+    }
+    if(argc == 2){
+        unzip(arg[1], arg[1]);
+    }
+    else if(argc == 3){
 
-    // MAnipula o Arquivo
-    HandleFile file;
-    // Lista que Contém os Nós que fomaram a Árvore de Huffman
-    List list;
-    // Árvore de Hufman
-    Tree tree;
-    // Binários do Arquivo de Saída
-    QByteArray codeFile;
+    }
+    else if(argc == 4){
 
-    int sizeTrash;
-    int sizeTree;
-//    int sizeName;
-
-    file.SetIO(argv[1], "EU AQUI.txt");
-    file.openFile(list);
-    tree.buildTree(list);
-    tree.encoding(tree.getRoot());
-    file.codeBody(tree.listNodes());
-
-    sizeTrash = 8-((file.sizeCode())%8);
-    if(sizeTrash == 8) sizeTrash = 0;
-    else if(sizeTrash > 8) qDebug() << "DEU ERRO";
-    sizeTree = tree.getcodeTree().size();
-
-
-    codeFile += decToByte(sizeTrash,sizeTree);
-    codeFile += file.getCodeBody();
-
-
-    file.appendFileOut(codeFile);
-//    file.appendFileOut(file.getCodeBody());
-
-    qDebug() << tree.getcodeTree();
-    qDebug() << sizeTrash
-             << sizeTree;
+    }
+    else if(argc == 5){
+        if(arg[1] == "-c"){
+            zip(arg[2], arg[4]);
+        }
+    }
 
     qDebug()<<"-------FIM-------";
 

@@ -25,18 +25,19 @@ long long int HandleFile::sizeCode() const
 {
     return _sizeCode;
 }
-void HandleFile::appendFileOut(QByteArray code)
+void HandleFile::buildFileOut(QByteArray code, QString nameOut)
 {
-    QFile file(_pathOut);
+    QFile file(nameOut);
     if (!file.open(QIODevice::WriteOnly)) return;
     file.write(code);
     file.close();
+    qDebug() << "\nARQUIVO COMPACTADO COM SUCESSO\n";
 }
 
-void HandleFile::openFile(List &list)
+void HandleFile::openFile(List &list, QString in)
 {
     // Abre o Arquivo de entrada
-    QFile file(_pathIn);
+    QFile file(in);
     if(!file.open(QIODevice::ReadOnly)){
         qDebug() << "The file could not be read";
     }
@@ -58,12 +59,6 @@ void HandleFile::openFile(List &list)
     }
     file.close();
 }
-
-void HandleFile::SetIO(char *pathIn, char *pathOut)
-{
-    _pathIn = pathIn;
-    _pathOut = pathOut;
-}
 QByteArray HandleFile::getBuffer() const
 {
     return buffer;
@@ -81,17 +76,14 @@ void HandleFile::show() const
 void HandleFile::codeBody(QString *list)
 {
     for(int i = 0; i < buffer.size(); ++i){
-//        qDebug() << "EU" << i << (char)buffer[i];
-        for(int j = 0; j < list[buffer[i]].size(); ++j){
+        for(int j = 0; j < list[(unsigned char)buffer[i]].size(); ++j){
             bool bit = true;
-            if(list[buffer[i]][j] == '0') bit = false;
+            if(list[(unsigned char)buffer[i]][j] == '0') bit = false;
             _bodyFile.setBit(_sizeCode, bit);
             ++_sizeCode;
         }
-
     }
 }
-
 QByteArray HandleFile::getCodeBody()
 {
     return _bodyFile.getByteArray();

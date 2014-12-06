@@ -4,23 +4,16 @@
 #include "Node.h"
 #include "list.h"
 #include "ByteArray.h"
-#include <fstream>
 #include <QList>
 #include <QBitArray>
+#include <QString>
 
-using std::ifstream;
-using std::ofstream;
 class HandleFile
 {
 private:
     QByteArray buffer;
     long long int _sizeCode;
-    char *_pathIn;
-    char *_pathOut;
     ByteArray _bodyFile;
-    ifstream fileIn;
-    ofstream fileOut;
-
 
 public:
     //Construtor
@@ -30,7 +23,7 @@ public:
     ~HandleFile();
 
     // Adiciona o Code no Arquivo de saída
-    void appendFileOut(QByteArray code);
+    void buildFileOut(QByteArray code, QString nameOut);
 
     // Constuir Caleçalho
     void buildHeader();
@@ -39,10 +32,7 @@ public:
     QByteArray getBuffer() const;
 
     // Abre o arquivo e conta as Ocorrências
-    void openFile(List &list);
-
-    // Seta a Entrada e Saida
-    void SetIO(char *pathIn, char *pathOut);
+    void openFile(List &list, QString in);
 
     // Imprime buffer
     void show() const;

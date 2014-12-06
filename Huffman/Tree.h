@@ -5,6 +5,7 @@
 #include "list.h"
 #include "HandleFile.h"
 
+#include <QByteArray>
 #include <QString>
 
 class Tree
@@ -13,9 +14,10 @@ private:
     HandleFile file;
     List *list;
     Node *root;
-    QString _codeTree;
+    QByteArray _codeTree;
     QString _codeNode;
     QString *_listNodes;
+    long int size;
 
 
 
@@ -25,7 +27,7 @@ public:
     void buildTree(List &list);
 
     // Retorna o Código da Árvore
-    QString getcodeTree();
+    QByteArray getcodeTree();
 
     //Retorna o Código do Corpo
     QString *listNodes();

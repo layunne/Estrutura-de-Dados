@@ -2,12 +2,14 @@
 #include "HandleFile.h"
 #include <QDebug>
 #include <QString>
+#include <QByteArray>
 
 
 Tree::Tree()
 {
     root = NULL;
     _listNodes = new QString[256];
+    size = 0;
 }
 void Tree::buildTree(List &list)
 {
@@ -21,7 +23,7 @@ void Tree::buildTree(List &list)
     root = list.getBegin();
 }
 
-QString Tree::getcodeTree()
+QByteArray Tree::getcodeTree()
 {
     return _codeTree;
 }
@@ -55,6 +57,14 @@ void Tree::encoding(Node *base)
     // Gerando uma lista das Folhas
     if(base->isLeaf()){
         _listNodes[base->getContent()] = base->getCode();
+        ++size;
+//        if(size==256) {
+//            qDebug() << "SIZE NODES =" << size;
+//            qDebug() << base->getContent() << base->getCode();
+//            for(int i = 0; i < 256; ++i){
+//                qDebug() << _listNodes[i];
+//            }
+//        }
     }
     encoding(n1);
     encoding(n2);
