@@ -7,7 +7,6 @@ ByteArray::ByteArray()
 {
     _byteArray = NULL;
 }
-
 void ByteArray::toByteArray(QByteArray byteArray)
 {
     _byteArray = byteArray;
@@ -31,7 +30,7 @@ void ByteArray::remove(int iByte)
 bool ByteArray::getBit(long long int iBit)
 {
     long long int iByte = iBit/8;
-    if(iByte > _byteArray.size() || iBit < 0){
+    if(iByte > _byteArray.size() || iBit < 0) {
         qDebug()<< "índice Errado";
         exit(1);
     }
@@ -53,8 +52,9 @@ QByteArray ByteArray::getByteArray()
 void ByteArray::setBit(long long int iBit, bool bit)
 {
     long long int iByte = iBit/8;
-    if(iByte > _byteArray.size()-1) _byteArray.append((char)0);
-
+    if(iByte > _byteArray.size()-1) {
+        _byteArray.append((char)0);
+    }
     char byte = _byteArray.at(iByte);
 
     _byteArray.remove(iByte, 1);
@@ -62,7 +62,7 @@ void ByteArray::setBit(long long int iBit, bool bit)
     char mask = 0x1;
     mask = mask << (7 - iBit%8);
 
-    if(bit){
+    if(bit) {
         byte = byte | mask;
     } else {
         mask = 0xFF ^ mask;
@@ -87,4 +87,3 @@ int ByteArray::size()
 {
     return _byteArray.length();
 }
-

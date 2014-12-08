@@ -2,13 +2,15 @@
 #include <QDebug>
 #include <QString>
 
-Node::Node(){
+Node::Node()
+{
     _left = NULL;
     _right = NULL;
     _dad = NULL;
     _isLeaf = true;
 }
-Node::Node(bool isLeaf,int  weight, unsigned char content){
+Node::Node(bool isLeaf,int  weight, unsigned char content)
+{
     _left = NULL;
     _right = NULL;
     _dad = NULL;
@@ -26,7 +28,8 @@ QString Node::getCode()
 {
     return _code;
 }
-unsigned char Node::getContent(){
+unsigned char Node::getContent()
+{
     return _content;
 }
 
@@ -34,7 +37,8 @@ Node *Node::getDad()
 {
     return _dad;
 }
-int Node::getWeight(){
+int Node::getWeight()
+{
     return _weight;
 }
 
@@ -42,10 +46,12 @@ void Node::setDad(Node *dad)
 {
     _dad = dad;
 }
-Node *Node::getLeftChild(){
+Node *Node::getLeftChild()
+{
     return _left;
 }
-Node *Node::getRightChild(){
+Node *Node::getRightChild()
+{
     return _right;
 }
 
@@ -64,10 +70,12 @@ void Node::setChilds(Node *left, Node *right)
     _left = left;
     _right = right;
 }
-void Node::setLeftChild(Node *left){
+void Node::setLeftChild(Node *left)
+{
     _left = left;
 }
-void Node::setRightChild(Node *right){
+void Node::setRightChild(Node *right)
+{
     _right = right;
 }
 void Node::setWeight(int weight)

@@ -57,7 +57,7 @@ void zip(QString nameIn, QString nameOut)
 
 void unzip(QString nameIn, QString out)
 {
-    qDebug() << "DESINICIANDO COMPACTAÇÃO\n";
+    qDebug() << "INICIANDO DESCOMPACTAÇÃO\n";
     qDebug() << "Entrada:" << nameIn;
     qDebug() << "Saída:" << out;
     // Manipula o Arquivo
@@ -101,27 +101,19 @@ void unzip(QString nameIn, QString out)
     sizeName = byteToDec(codeFileIn);
     codeFileIn.remove(0,1);
 
-    for(int i = 0; i < sizeName; ++i){
+    for(int i = 0; i < sizeName; ++i) {
         nameFile.append(codeFileIn.at(0));
         codeFileIn.remove(0,1);
     }
     // Decodifica a representação da Árvore de Huffman
-    for(int i = 0; i < sizeTree; ++i){
+    for(int i = 0; i < sizeTree; ++i) {
         codeTree.append((char)codeFileIn.at(0));
         codeFileIn.remove(0,1);
     }
 
-
     // Descarta o Lixo
     ByteArray codeFileByteArray;
     codeFileByteArray.toByteArray(codeFileIn);
-    qDebug() << "sizeTrash" << sizeTrash;
-    qDebug() << "sizeTree" << sizeTree;
-    qDebug() << "sizeName" << sizeName;
-    qDebug() << nameFile;
-//    qDebug() << codeTree;
-
-
 
     // Reconstroi a Árvore de Huffman
     Node *root = new Node(false);
@@ -138,22 +130,21 @@ void unzip(QString nameIn, QString out)
     code.toByteArray(codeFileIn);
     QByteArray temp;
     QPair<unsigned char, bool> aux;
-//    for(int i = 0; i < codeFileIn.size(); ++i){
-//        qDebug() << hex << (unsigned char)codeFileIn.at(i);
-//    }
-    for(int i = 0; i < codeFileIn.size()*8 - sizeTrash; ++i){
-        if(code.getBit(i)){
+
+    for(int i = 0; i < codeFileIn.size()*8 - sizeTrash; ++i) {
+        if(code.getBit(i)) {
             temp += '1';
         } else {
             temp += '0';
         }
         aux = tree.searchLeaf(temp, root);
-        if(aux.second){
+        if(aux.second) {
             codeFileOut.append(aux.first);
-//            qDebug() << (char)aux.first<< hex << (unsigned char)aux.first << temp;
             temp = "";
         }
     }
+
+    //Gera o arquvo de saída
     QByteArray test;
     test = "/home/layunne/git/";
     test += nameFile;
@@ -208,15 +199,15 @@ QPair<int, int> byteToDecPair(QByteArray code)
     ByteArray bytes;
     bytes.toByteArray(code);
     int n0=0, n1=0;
-    for(int i = 2; i >= 0; --i){
+    for(int i = 2; i >= 0; --i) {
         if(bytes.getBit(i)) {
             int mask = 0x1;
             mask = mask << (2 - i);
             n0 += mask;
         }
     }
-    for(int i = 15; i > 2; --i){
-        if(bytes.getBit(i)){
+    for(int i = 15; i > 2; --i) {
+        if(bytes.getBit(i)) {
             int mask = 0x1;
             mask = mask << (15 -i);
             n1 += mask;
@@ -229,21 +220,20 @@ int byteToDec(QByteArray code)
 {
     ByteArray bytes;
     bytes.toByteArray(code);
-    int n=0;
-    for(int i = 7; i > 0; --i){
+    int dec=0;
+    for(int i = 7; i > 0; --i) {
         if(bytes.getBit(i)) {
             int mask = 0x1;
             mask = mask << (7 - i);
-            n += mask;
+            dec += mask;
         }
     }
-    return n;
-
+    return dec;
 }
 void help(int i)
 {
     qDebug() << "-------------HELP-------------\n";
-    if(i == 0){
+    if(i == 0) {
         qDebug() << "LISTA DE COMANDOS:\n\n"
                  << "$> huffman -c arquivo_origem.x -o arquivo_de_saida.huff\n"
                  << "   Comprime o arquivo \"arquivo_origem.x\" e gera o arquivo de saída\n    \"arquivo_de_saida.huff\"\n\n"
@@ -267,5 +257,3 @@ void help(int i)
     qDebug() << "------------------------------";
     exit(1);
 }
-
-

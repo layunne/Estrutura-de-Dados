@@ -14,7 +14,7 @@ Tree::Tree()
 }
 void Tree::buildTree(List &list)
 {
-    while(list.size() > 1){
+    while(list.size() > 1) {
         list.sort();
         Node *node = new Node(false, 0, 0);
         node->setWeight(list.getValue(0)->getWeight() + list.getValue(1)->getWeight());
@@ -35,7 +35,7 @@ void Tree::rebuildTree(Node *base)
 
     }
 
-    if(_codeTree.at(0) == '('  && verificador){
+    if(_codeTree.at(0) == '('  && verificador) {
         _codeTree.remove(0,1);
         base->setIsLeaf(false);
         base->setChilds(new Node(), new Node());
@@ -43,8 +43,7 @@ void Tree::rebuildTree(Node *base)
         base->getRightChild()->setCode(base->getCode() + "1");
         rebuildTree(base->getLeftChild());
         rebuildTree(base->getRightChild());
-    }
-    else{
+    } else {
         base->setIsLeaf(true);
         base->setContent(_codeTree.at(0));
         _listLeaf[base->getContent()] = base->getCode();
@@ -55,17 +54,16 @@ void Tree::rebuildTree(Node *base)
 QPair<unsigned char, bool> Tree::searchLeaf(QString codeLeaf, Node *base)
 {
     if(!base->isLeaf()) {
-        if(codeLeaf.at(0) == '0'){
+        if(codeLeaf.at(0) == '0') {
             if(codeLeaf.size()>1) codeLeaf.remove(0,1);
             else codeLeaf[0] = '2';
             return searchLeaf(codeLeaf, base->getLeftChild());
         }
-        else if(codeLeaf.at(0) == '1'){
+        else if(codeLeaf.at(0) == '1') {
             if(codeLeaf.size()>1) codeLeaf.remove(0,1);
             else codeLeaf[0] = '2';
             return searchLeaf(codeLeaf, base->getRightChild());
-        }
-        else {
+        } else {
 
             return QPair<unsigned char, bool> (base->getContent(),false);
         }
@@ -95,22 +93,22 @@ void Tree::encoding(Node *base)
     Node *n1 = base->getLeftChild();
     Node *n2 = base->getRightChild();
 
-
     // Codificando os Nós
     if(n1) n1->setCode(codeBase + '0');
     if(n2) n2->setCode(codeBase + '1');
 
     // Construindo Código da Árvore
-    if(!base->isLeaf() && base != _root){
+    if(!base->isLeaf() && base != _root) {
         _codeTree += "(";
 
-    } else if(base->isLeaf()){
+    }
+    else if(base->isLeaf()) {
         if(base->getContent() == '(' || base->getContent() == '#') _codeTree += '#';
         _codeTree += base->getContent();
     }
 
     // Gerando uma lista das Folhas
-    if(base->isLeaf()){
+    if(base->isLeaf()) {
         _listLeaf[base->getContent()] = base->getCode();
         ++size;
     }
@@ -138,7 +136,7 @@ void Tree::showCodeLeaf(Node *base)
 {
     if(base == NULL) return;
 
-    if(base->isLeaf()){
+    if(base->isLeaf()) {
         qDebug() << base->getCode() << "="
                  << (char) base->getContent();
     }
@@ -148,7 +146,7 @@ void Tree::showCodeLeaf(Node *base)
 
 void Tree::showListNodes()
 {
-   for(int i = 0; i < 256; ++i){
+   for(int i = 0; i < 256; ++i) {
        if(_listLeaf[i] != "")qDebug() << _listLeaf[i]
                                        <<  (char)i;
    }
@@ -158,7 +156,7 @@ void Tree::showTree(Node *base)
 {
     if(base == NULL) return;
 
-    if(base->isLeaf()){
+    if(base->isLeaf()) {
         qDebug() << "Leaf:" << base->getWeight() << "SEM PESO"
                  << (char)base->getContent()
                  << hex << base->getContent();

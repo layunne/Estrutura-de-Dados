@@ -79,8 +79,8 @@ Node *List::remove(int pos)
 void List::show()
 {
     qDebug() << "---------showList begin-------------";
-    for(int i = 0; i < list.length(); ++i){
-        if(list.value(i)->isLeaf() == true){
+    for(int i = 0; i < list.length(); ++i) {
+        if(list.value(i)->isLeaf() == true) {
             qDebug() << i
                      << list.value(i)->getWeight()
                      << (char)list.value(i)->getContent()
@@ -99,7 +99,7 @@ void List::showTree(Node *base)
     if(base == NULL) return;
 
 
-    if(base->isLeaf()){
+    if(base->isLeaf()) {
         qDebug() << "Leaf:" << base->getWeight()
                  << (char)base->getContent()
                  << hex << base->getContent();
@@ -112,8 +112,8 @@ void List::showTree(Node *base)
 
 bool caseInsensitiveLessThan(Node* &n1, Node* &n2)
 {
-    if(n1->getWeight() == n2->getWeight()){
-        if(!(n1->isLeaf()) && !(n2->isLeaf())){
+    if(n1->getWeight() == n2->getWeight()) {
+        if(!(n1->isLeaf()) && !(n2->isLeaf())) {
             Node *temp1 = n1->getLeftChild();
             Node *temp2 = n2->getLeftChild();
             if(temp1->isLeaf() != temp2->isLeaf()) return true;
