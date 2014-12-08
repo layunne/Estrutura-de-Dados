@@ -1,12 +1,12 @@
 #include "Node.h"
 #include <QDebug>
+#include <QString>
 
 Node::Node(){
     _left = NULL;
     _right = NULL;
     _dad = NULL;
     _isLeaf = true;
-//    _code = 0;
 }
 Node::Node(bool isLeaf,int  weight, unsigned char content){
     _left = NULL;
@@ -15,7 +15,6 @@ Node::Node(bool isLeaf,int  weight, unsigned char content){
     _weight = weight;
     _content = content;
     _isLeaf = isLeaf;
-//    _code = 0;
 }
 
 bool Node::isLeaf()
@@ -55,6 +54,11 @@ void Node::setCode(QString code)
     _code += code;
 }
 
+void Node::setContent(unsigned char content)
+{
+    _content = content;
+}
+
 void Node::setChilds(Node *left, Node *right)
 {
     _left = left;
@@ -69,4 +73,9 @@ void Node::setRightChild(Node *right){
 void Node::setWeight(int weight)
 {
     _weight = weight;
+}
+
+void Node::setIsLeaf(bool isLeaf)
+{
+    _isLeaf = isLeaf;
 }

@@ -1,5 +1,6 @@
 #include "HandleFile.h"
 #include "Node.h"
+#include "auxiliar.h"
 #include <fstream>
 #include <QDebug>
 #include <QList>
@@ -28,21 +29,23 @@ long long int HandleFile::sizeCode() const
 void HandleFile::buildFileOut(QByteArray code, QString nameOut)
 {
     QFile file(nameOut);
-    if (!file.open(QIODevice::WriteOnly)) return;
+    if (!file.open(QIODevice::WriteOnly)){
+        return;
+    }
     file.write(code);
     file.close();
-    qDebug() << "\nARQUIVO COMPACTADO COM SUCESSO\n";
+    qDebug() << "\nARQUIVO SALVO COM SUCESSO!\n\n";
 }
 
-void HandleFile::openFile(List &list, QString in)
+void HandleFile::openFile(QString in, List &list)
 {
     // Abre o Arquivo de entrada
     QFile file(in);
     if(!file.open(QIODevice::ReadOnly)){
-        qDebug() << "The file could not be read";
+        help(2);
     }
 
-    // Ler a Entrada e contar as Ocorrências
+    // Lê o arquivo de entrada e conta as Ocorrências
     int count[256] = {0};
     while(!file.atEnd()){
         QByteArray line = file.readLine(1024);
@@ -51,11 +54,26 @@ void HandleFile::openFile(List &list, QString in)
             ++count[(unsigned char) line.at(i)];
         }
     }
+    file.close();
     for(int i = 0; i < 256; ++i) {
         if(count[i]) {
             Node *node = new Node(true, count[i], i);
             list.append(node);
         }
+    }
+}
+
+void HandleFile::openFile(QString in)
+{
+    // Abre o Arquivo de entrada
+    QFile file(in);
+    if(!file.open(QIODevice::ReadOnly)){
+        help(2);
+    }
+    // Lê arquivo de entrada compactado passando para o buffer
+    while(!file.atEnd()){
+        QByteArray line = file.readLine(1024);
+        buffer.append(line);
     }
     file.close();
 }

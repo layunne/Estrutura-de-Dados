@@ -17,7 +17,7 @@ private:
 
 public:
     Node();
-    Node(bool l, int  w, unsigned char c = 0);
+    Node(bool isLeaf, int  weight = 0, unsigned char content = 0);
     ~Node();
 
     // se é folha
@@ -47,6 +47,9 @@ public:
     //Seta o Código
     void setCode(QString code);
 
+    // Seta o Conteúdo
+    void setContent(unsigned char content);
+
     // Seta os dois filhos juntos
     void setChilds(Node *left, Node *right);
 
@@ -58,6 +61,9 @@ public:
 
     //Seta o Peso/Frequencia
     void setWeight(int weight);
+
+    // Seta se é folha ou não
+    void setIsLeaf(bool isLeaf = false);
 };
 
 #endif // NODE_HPP

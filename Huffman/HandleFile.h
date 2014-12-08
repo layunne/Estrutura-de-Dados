@@ -31,8 +31,10 @@ public:
     // Retorna buffer
     QByteArray getBuffer() const;
 
-    // Abre o arquivo e conta as Ocorrências
-    void openFile(List &list, QString in);
+    // Abre o arquivo para compactação e conta as ocorrências
+    void openFile(QString in, List &list);
+    // Abre o arquivo para descompactação
+    void openFile(QString in);
 
     // Imprime buffer
     void show() const;
