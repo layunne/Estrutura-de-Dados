@@ -237,6 +237,7 @@ int byteToDec(QByteArray code)
     }
     return dec;
 }
+
 void help(int i)
 {
     cout << "-------------HELP-------------\n\n";
@@ -249,7 +250,11 @@ void help(int i)
                  <<  "$> huffman arquivo.huff\n"
                  <<  "   Descomprime o arquivo \"arquivo.huff\" na pasta local com o nome original\n\n"
                  <<  "$> huffman arquivo.huff -d /home/user/destino\n"
-                 <<  "   Descomprime o arquivo \"arquivo.huff\" na pasta “/home/user/destino\"\n    com o nome original\n\n";
+                 <<  "   Descomprime o arquivo \"arquivo.huff\" na pasta “/home/user/destino\"\n    com o nome original\n\n"
+                 <<  "$> huffman --gui\n"
+                 <<  "   Inicia a Interface gráfica"
+                 <<  "$> huffman help\n"
+                 <<  " ";
     }
     else if(i == 1) {
         qDebug() << "COMANDO NÃO EXISTE OU ESTÁ INCORRETO\n";
