@@ -3,17 +3,27 @@
 
 #include "Node.h"
 #include "list.h"
+#include "auxiliar.h"
 #include "ByteArray.h"
+
 #include <QList>
-#include <QBitArray>
 #include <QString>
+#include <fstream>
+#include <QDebug>
+#include <QFile>
+#include <QByteArray>
+#include <iostream>
+
+#define DEBUG 1
+//#define DEBUGOUT(mensagem) if(DEBUG)std::cout << mensagem << "\n";
+#define DEBUGOUT(mensagem) if(DEBUG)qDebug() << mensagem;
 
 class HandleFile
 {
 private:
-    QByteArray buffer;
-    long long int _sizeCode;
-    ByteArray _bodyFile;
+    QByteArray _buffer;          // Arquivo de Entrada
+    long long int _sizeCode;     // Tamanho do código pré-codificado
+    ByteArray _bodyFile;         // Corpo do Arquivo de saída - sem o cabeçalho
 
 public:
     //Construtor
@@ -33,6 +43,7 @@ public:
 
     // Abre o arquivo para compactação e conta as ocorrências
     void openFile(QString in, List &list);
+
     // Abre o arquivo para descompactação
     void openFile(QString in);
 
@@ -45,9 +56,8 @@ public:
     // Retorna o Corpo do Árquivo
     QByteArray getCodeBody();
 
+    // Tamanho do Código
     long long sizeCode() const;
-
-    void setSizeCode(long long sizeCode);
 };
 
 #endif // HANDLEFILE_H

@@ -1,7 +1,4 @@
 #include "ByteArray.h"
-#include <QByteArray>
-#include <QDebug>
-
 
 ByteArray::ByteArray()
 {
@@ -31,7 +28,7 @@ bool ByteArray::getBit(long long int iBit)
 {
     long long int iByte = iBit/8;
     if(iByte > _byteArray.size() || iBit < 0) {
-        qDebug()<< "índice Errado";
+       qDebug() << "índice Errado\n";
         exit(1);
     }
 

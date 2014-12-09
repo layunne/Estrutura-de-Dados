@@ -1,21 +1,19 @@
 #include "list.h"
-#include "Node.h"
-#include <QList>
-#include <QDebug>
-#include <stdlib.h>
+
+using std::cout;
 
 List::List()
 {
-    curr = 0;
+
+}
+
+List::~List()
+{
+
 }
 void List::append(Node *node)
 {
     list.append(node);
-}
-
-void List::clear()
-{
-    list.clear();
 }
 
 Node *List::getBegin()
@@ -28,12 +26,6 @@ Node *List::getLast()
     return list.last();
 }
 
-void List::insert(Node *node)
-{
-    list.insert(curr, node);
-
-}
-
 Node *List::getValue(int pos)
 {
     return list.value(pos);
@@ -42,31 +34,6 @@ Node *List::getValue(int pos)
 int List::size()
 {
     return list.size();
-}
-
-void List::moveToEnd()
-{
-    curr = list.length() -1;
-}
-
-void List::moveToPos(const int pos)
-{
-    curr = pos;
-}
-
-void List::moveToStart()
-{
-    curr = 0;
-}
-
-void List::next()
-{
-    if((int)curr < (list.length() -1)) ++curr;
-}
-
-void List::prev()
-{
-    if(curr > 0) --curr;
 }
 
 Node *List::remove(int pos)
@@ -78,20 +45,20 @@ Node *List::remove(int pos)
 
 void List::show()
 {
-    qDebug() << "---------showList begin-------------";
+    DEBUGOUT("---------showList begin-------------")
     for(int i = 0; i < list.length(); ++i) {
         if(list.value(i)->isLeaf() == true) {
-            qDebug() << i
+            DEBUGOUT ( i
                      << list.value(i)->getWeight()
                      << (char)list.value(i)->getContent()
-                     << hex << list.value(i)->getContent();
+                     << hex << list.value(i)->getContent())
         } else {
-            qDebug() << i
-                     << list.value(i)->getWeight();
+            DEBUGOUT(i
+                     << list.value(i)->getWeight())
         }
 
     }
-    qDebug() << "---------showList end---------------";
+    DEBUGOUT("---------showList end---------------")
 }
 
 void List::showTree(Node *base)
@@ -100,11 +67,11 @@ void List::showTree(Node *base)
 
 
     if(base->isLeaf()) {
-        qDebug() << "Leaf:" << base->getWeight()
+        DEBUGOUT ("Leaf: " << base->getWeight()
                  << (char)base->getContent()
-                 << hex << base->getContent();
+                 << hex << base->getContent())
     } else {
-        qDebug() << "Node:" << base->getWeight();
+        DEBUGOUT( "Node: " << base->getWeight())
     }
     showTree(base->getLeftChild());
     showTree(base->getRightChild());

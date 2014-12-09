@@ -2,23 +2,26 @@
 #define LIST_H
 
 #include "Node.h"
+
 #include <QList>
+#include <QDebug>
+#include <stdlib.h>
+#include <iostream>
+
+#define DEBUG 1
+//#define DEBUGOUT(mensagem) if(DEBUG)std::cout << mensagem << "\n";
+#define DEBUGOUT(mensagem) if(DEBUG)qDebug() << mensagem;
 
 class List
 {
 private:
-    QList<Node *> list;
-    unsigned int curr;
+    QList<Node *> list; // Uma Lista de Nodes
 public:
     List();
+    ~List();
+
     // Insere o item na lista no final da lista
     void append(Node *node);
-
-    // Limpa a Lista
-    void clear();
-
-    // Retorna a posição atual do Cursor
-    int currPos();
 
     //Retorna o Primeiro vador da lista
     Node *getBegin();
@@ -29,26 +32,8 @@ public:
     // Retorna um Node da posição atual
     Node *getValue(int pos);
 
-    // Insere o item na lista na posição atual
-    void insert(Node *node);
-
     // Retorna o tamanho atual da lista
     int size();
-
-    // Move o Cursor para a ultima posição
-    void moveToEnd();
-
-    // Move o Cursor para a posição dada
-    void moveToPos(const int pos);
-
-    // Move o Cursor para a primeira posição
-    void moveToStart();
-
-    // Move o Cursor uma posição pra frente
-    void next();
-
-    // Move o Cursor uma posição pra trás
-    void prev();
 
     // Remove o item da posição atual
     Node *remove(int pos);
@@ -61,7 +46,6 @@ public:
 
     // Ordena a lista pelo Peso/Frequencia
     void sort();
-
 };
 
 

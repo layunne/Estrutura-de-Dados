@@ -1,17 +1,16 @@
 #include "Tree.h"
-#include "HandleFile.h"
-#include <QDebug>
-#include <QString>
-#include <QByteArray>
-#include <QPair>
-
 
 Tree::Tree()
 {
     _root = NULL;
     _listLeaf = new QString[256];
-    size = 0;
 }
+
+Tree::~Tree()
+{
+
+}
+
 void Tree::buildTree(List &list)
 {
     while(list.size() > 1) {
@@ -73,7 +72,7 @@ QPair<unsigned char, bool> Tree::searchLeaf(QString codeLeaf, Node *base)
 
 void Tree::showCodeTree()
 {
-   qDebug() << _codeTree;
+   DEBUGOUT(_codeTree)
 }
 QByteArray Tree::getcodeTree()
 {
@@ -93,24 +92,22 @@ void Tree::encoding(Node *base)
     Node *n1 = base->getLeftChild();
     Node *n2 = base->getRightChild();
 
-    // Codificando os Nós
+    // Codificando os Nós - Esqueda 0, direita 1
     if(n1) n1->setCode(codeBase + '0');
     if(n2) n2->setCode(codeBase + '1');
 
     // Construindo Código da Árvore
     if(!base->isLeaf() && base != _root) {
         _codeTree += "(";
-
     }
     else if(base->isLeaf()) {
         if(base->getContent() == '(' || base->getContent() == '#') _codeTree += '#';
         _codeTree += base->getContent();
     }
 
-    // Gerando uma lista das Folhas
+    // Gerando a lista das Folhas
     if(base->isLeaf()) {
         _listLeaf[base->getContent()] = base->getCode();
-        ++size;
     }
     encoding(n1);
     encoding(n2);
@@ -137,8 +134,8 @@ void Tree::showCodeLeaf(Node *base)
     if(base == NULL) return;
 
     if(base->isLeaf()) {
-        qDebug() << base->getCode() << "="
-                 << (char) base->getContent();
+        DEBUGOUT (base->getCode() << "="
+                 << (char) base->getContent())
     }
     showCodeLeaf(base->getLeftChild());
     showCodeLeaf(base->getRightChild());
@@ -147,8 +144,8 @@ void Tree::showCodeLeaf(Node *base)
 void Tree::showListNodes()
 {
    for(int i = 0; i < 256; ++i) {
-       if(_listLeaf[i] != "")qDebug() << _listLeaf[i]
-                                       <<  (char)i;
+       if(_listLeaf[i] != "")DEBUGOUT( _listLeaf[i]
+                                       <<  (char)i)
    }
 }
 
@@ -157,11 +154,11 @@ void Tree::showTree(Node *base)
     if(base == NULL) return;
 
     if(base->isLeaf()) {
-        qDebug() << "Leaf:" << base->getWeight() << "SEM PESO"
+        DEBUGOUT ("Leaf: " << base->getWeight() << "SEM PESO"
                  << (char)base->getContent()
-                 << hex << base->getContent();
+                 << hex << base->getContent())
     } else {
-        qDebug() << "Node:" << base->getWeight() << "SEM PESO";
+        DEBUGOUT( "Node: " << base->getWeight() << "SEM PESO")
     }
     showTree(base->getLeftChild());
     showTree(base->getRightChild());

@@ -2,6 +2,13 @@
 #define BYTEARRAY_H
 
 #include <QByteArray>
+#include <QDebug>
+#include <iostream>
+
+#define DEBUG 1
+//#define DEBUGOUT(mensagem) if(DEBUG)std::cout << mensagem << "\n";
+#define DEBUGOUT(mensagem) if(DEBUG)qDebug() << mensagem;
+using std::cout;
 
 class ByteArray
 {
@@ -34,11 +41,8 @@ public:
     void setByte(long long int i, char byte);
     void setByte(long long int i, QByteArray byte);
 
-
     // Retorna o Tamanho
     int size();
-
-    int show(int i);
 
 };
 

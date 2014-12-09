@@ -7,6 +7,7 @@
 QT       += core
 
 QT       -= gui
+QT += widgets
 
 TARGET = Huffman
 CONFIG   += console
@@ -21,7 +22,8 @@ SOURCES += main.cpp \
     HandleFile.cpp \
     list.cpp \
     ByteArray.cpp \
-    auxiliar.cpp
+    auxiliar.cpp \
+    gui.cpp
 
 HEADERS += \
     Node.h \
@@ -29,4 +31,8 @@ HEADERS += \
     HandleFile.h \
     list.h \
     ByteArray.h \
-    auxiliar.h
+    auxiliar.h \
+    gui.h
+
+FORMS += \
+    gui.ui

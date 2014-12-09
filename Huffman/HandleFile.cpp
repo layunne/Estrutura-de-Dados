@@ -1,11 +1,6 @@
 #include "HandleFile.h"
-#include "Node.h"
-#include "auxiliar.h"
-#include <fstream>
-#include <QDebug>
-#include <QList>
-#include <QFile>
-#include <QByteArray>
+
+using std::cout;
 
 
 using std::ifstream;
@@ -49,7 +44,7 @@ void HandleFile::openFile(QString in, List &list)
     int count[256] = {0};
     while(!file.atEnd()) {
         QByteArray line = file.readLine(1024);
-        buffer.append(line);
+        _buffer.append(line);
         for(int i = 0; i < line.size(); ++i) {
             ++count[(unsigned char) line.at(i)];
         }
@@ -73,30 +68,30 @@ void HandleFile::openFile(QString in)
     // Lê arquivo de entrada compactado passando para o buffer
     while(!file.atEnd()) {
         QByteArray line = file.readLine(1024);
-        buffer.append(line);
+        _buffer.append(line);
     }
     file.close();
 }
 QByteArray HandleFile::getBuffer() const
 {
-    return buffer;
+    return _buffer;
 }
 
 void HandleFile::show() const
 {
-    for(int i = 0; i < buffer.size(); ++i) {
-        qDebug() << i
-                 << (char)buffer[i]
-                 << hex << (unsigned char)buffer[i];
+    for(int i = 0; i < _buffer.size(); ++i) {
+        DEBUGOUT(i
+                 << (char)_buffer[i]
+                 << hex << (unsigned char)_buffer[i])
     }
 }
 
 void HandleFile::codeBody(QString *list)
 {
-    for(int i = 0; i < buffer.size(); ++i) {
-        for(int j = 0; j < list[(unsigned char)buffer[i]].size(); ++j) {
+    for(int i = 0; i < _buffer.size(); ++i) {
+        for(int j = 0; j < list[(unsigned char)_buffer[i]].size(); ++j) {
             bool bit = true;
-            if(list[(unsigned char)buffer[i]][j] == '0') {
+            if(list[(unsigned char)_buffer[i]][j] == '0') {
                 bit = false;
             }
             _bodyFile.setBit(_sizeCode, bit);

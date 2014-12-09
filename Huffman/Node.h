@@ -8,7 +8,6 @@ class Node
 private:
     Node *_left;               // Filho Esquerda
     Node *_right;              // Filho Direita
-    Node *_dad;
     QString _code;              // Código do Nó
     bool _isLeaf;              // Se é folha
     unsigned char _content;    // Conteúdo
@@ -29,9 +28,6 @@ public:
     // Retorna o conteudo do nó
     unsigned char getContent();
 
-    // Retorda pai
-    Node *getDad();
-
     // Retorna o Filho da Esquerda
     Node *getLeftChild();
 
@@ -40,9 +36,6 @@ public:
 
     // Retorna o Peso/Frequencia
     int getWeight();
-
-    // Seta Pai
-    void setDad(Node *dad);
 
     //Seta o Código
     void setCode(QString code);

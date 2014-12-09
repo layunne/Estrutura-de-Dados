@@ -12,13 +12,13 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_CORE_LIB
+DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I../../Huffman -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I.
+INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I../../Huffman -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I.
 LINK          = g++
 LFLAGS        = -m64
-LIBS          = $(SUBLIBS) -lQt5Core -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5Widgets -L/usr/lib/x86_64-linux-gnu -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
@@ -51,14 +51,17 @@ SOURCES       = ../main.cpp \
 		../HandleFile.cpp \
 		../list.cpp \
 		../ByteArray.cpp \
-		../auxiliar.cpp 
+		../auxiliar.cpp \
+		../gui.cpp moc_gui.cpp
 OBJECTS       = main.o \
 		Node.o \
 		Tree.o \
 		HandleFile.o \
 		list.o \
 		ByteArray.o \
-		auxiliar.o
+		auxiliar.o \
+		gui.o \
+		moc_gui.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -110,6 +113,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/moc.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/opengl.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/uic.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/thread.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
@@ -121,7 +126,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../HandleFile.cpp \
 		../list.cpp \
 		../ByteArray.cpp \
-		../auxiliar.cpp
+		../auxiliar.cpp \
+		../gui.cpp
 QMAKE_TARGET  = Huffman
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Huffman
@@ -151,7 +157,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): ui_gui.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Huffman.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -205,12 +211,16 @@ Makefile: ../Huffman.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmak
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/moc.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/opengl.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/uic.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/thread.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../Huffman.pro \
+		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
 	$(QMAKE) -spec linux-g++-64 CONFIG+=debug -o Makefile ../Huffman.pro
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
@@ -264,12 +274,16 @@ Makefile: ../Huffman.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmak
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/moc.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/opengl.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/uic.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/thread.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 ../Huffman.pro:
+/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++-64 CONFIG+=debug -o Makefile ../Huffman.pro
@@ -278,7 +292,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Huffman1.0.0 || mkdir -p .tmp/Huffman1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Node.h ../Tree.h ../HandleFile.h ../list.h ../ByteArray.h ../auxiliar.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../Node.cpp ../Tree.cpp ../HandleFile.cpp ../list.cpp ../ByteArray.cpp ../auxiliar.cpp .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../Node.h ../Tree.h ../HandleFile.h ../list.h ../ByteArray.h ../auxiliar.h ../gui.h .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../Node.cpp ../Tree.cpp ../HandleFile.cpp ../list.cpp ../ByteArray.cpp ../auxiliar.cpp ../gui.cpp .tmp/Huffman1.0.0/ && $(COPY_FILE) --parents ../gui.ui .tmp/Huffman1.0.0/ && (cd `dirname .tmp/Huffman1.0.0` && $(TAR) Huffman1.0.0.tar Huffman1.0.0 && $(COMPRESS) Huffman1.0.0.tar) && $(MOVE) `dirname .tmp/Huffman1.0.0`/Huffman1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Huffman1.0.0
 
 
 clean:compiler_clean 
@@ -301,25 +315,37 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_gui.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_gui.cpp
+moc_gui.cpp: ../gui.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/layunne/git/Estrutura-de-Dados/Huffman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../gui.h -o moc_gui.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
+compiler_uic_make_all: ui_gui.h
+compiler_uic_clean:
+	-$(DEL_FILE) ui_gui.h
+ui_gui.h: ../gui.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic ../gui.ui -o ui_gui.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
-main.o: ../main.cpp ../Node.h \
+main.o: ../main.cpp ../auxiliar.h \
+		../Node.h \
 		../HandleFile.h \
 		../list.h \
 		../ByteArray.h \
-		../Tree.h
+		../Tree.h \
+		../gui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 Node.o: ../Node.cpp ../Node.h
@@ -335,7 +361,9 @@ Tree.o: ../Tree.cpp ../Tree.h \
 HandleFile.o: ../HandleFile.cpp ../HandleFile.h \
 		../Node.h \
 		../list.h \
-		../ByteArray.h
+		../ByteArray.h \
+		../auxiliar.h \
+		../Tree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o HandleFile.o ../HandleFile.cpp
 
 list.o: ../list.cpp ../list.h \
@@ -346,8 +374,19 @@ ByteArray.o: ../ByteArray.cpp ../ByteArray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ByteArray.o ../ByteArray.cpp
 
 auxiliar.o: ../auxiliar.cpp ../auxiliar.h \
-		../ByteArray.h
+		../Node.h \
+		../HandleFile.h \
+		../list.h \
+		../ByteArray.h \
+		../Tree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o auxiliar.o ../auxiliar.cpp
+
+gui.o: ../gui.cpp ../gui.h \
+		ui_gui.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gui.o ../gui.cpp
+
+moc_gui.o: moc_gui.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gui.o moc_gui.cpp
 
 ####### Install
 
