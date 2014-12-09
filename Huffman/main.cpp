@@ -33,7 +33,9 @@ int main(int argc, char* argv[])
             }
             if(temp == ".huff") {
                 if(argc == 4 && arg[2] == "-d")  {
-                    unzip(arg[1], arg[3]);
+                    QString out = arg[3] ;
+                    if(out.size() && out[out.size()-1] != '/') out += '/';
+                    unzip(arg[1], out);
                 }
                 else if(argc == 2) {
                     unzip(arg[1]);
@@ -50,29 +52,27 @@ int main(int argc, char* argv[])
     }
     else if(argc == 3 && arg[1] == "-c") {
         QString nameOut;
-        int i = arg[2].size()-1;
-        for(; arg[2][i] != '.' && i > 0 ;--i);
-        if (!i) {
-            nameOut+= arg[2];
-        } else {
-            for(int j = 0; j < i; ++j) {
-                nameOut += arg[2][j];
-            }
-        }
-        zip(arg[2], nameOut);
+        QString nameIn = arg[2];
 
+        nameOut = editNameOut(nameIn);
+        zip(nameIn, nameOut);
     }
     else if(argc == 5 && arg[1] == "-c" && arg[3] == "-o") {
-        QString temp;
-        for(int i = arg[4].size()-5; i < arg[4].size() && i > 0; ++i) {
-            temp += arg[4][i];
+        QString nameIn, nameOut, temp;
+        nameIn = arg[2];
+        nameOut = arg[4];
+        int i = nameOut.size() - 1;
+        for( ; i > 0  && nameOut[i] != '.'; --i){
+            temp.append(nameOut[i]);
         }
-        if(temp == ".huff") {
-            zip(arg[2], arg[4]);
-        } else {
+
+        DEBUGOUT("Entrada:" << nameIn)
+        DEBUGOUT("Saída:" << nameOut)
+        if(temp == "ffuh") {DEBUGOUT("DEU")} //zip(nameIn, nameOut);
+        else {
             qDebug() << "-----------ATENÇÃO!!----------\n"
                      <<" ERRO: O NOME DO ARQUIVO DE SAÍDA NÃO É VÁLIDO!\n"
-                     << "    O nome não é um .huff\n\n"
+                     << "    O nome não é um .huff\n"
                      << "    Por favor, insira um nome do tipo \"arquivo_de_saida.huff\""
                      << "\n------------------------------\n\n";
             help();

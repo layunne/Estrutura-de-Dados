@@ -34,6 +34,9 @@ void zip(QString nameIn, QString nameOut);
 // Decompreção
 void unzip(QString nameIn, QString out = NULL);
 
+// Retorna o nome.huff
+QString editNameOut(QString name);
+
 // Ajuda
 void help(int i = 0);
 

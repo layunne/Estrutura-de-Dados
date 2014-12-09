@@ -21,23 +21,28 @@ long long int HandleFile::sizeCode() const
 {
     return _sizeCode;
 }
-void HandleFile::buildFileOut(QByteArray code, QString nameOut)
+bool HandleFile::buildFileOut(QByteArray code, QString nameOut)
 {
     QFile file(nameOut);
     if (!file.open(QIODevice::WriteOnly)) {
-        return;
+        qDebug() << "O DIRETÓRIO NÃO EXITE";
+        help(2);
+        return false;
     }
     file.write(code);
     file.close();
     qDebug() << "\nARQUIVO SALVO COM SUCESSO!\n\n";
+    return true;
 }
 
-void HandleFile::openFile(QString in, List &list)
+bool HandleFile::openFile(QString in, List &list)
 {
     // Abre o Arquivo de entrada
     QFile file(in);
     if(!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "O ARQUIVO NÃO EXITE";
         help(2);
+        return false;
     }
 
     // Lê o arquivo de entrada e conta as Ocorrências
@@ -56,13 +61,15 @@ void HandleFile::openFile(QString in, List &list)
             list.append(node);
         }
     }
+    return true;
 }
 
-void HandleFile::openFile(QString in)
+bool HandleFile::openFile(QString in)
 {
     // Abre o Arquivo de entrada
     QFile file(in);
     if(!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "O ARQUIVO NÃO EXITE";
         help(2);
     }
     // Lê arquivo de entrada compactado passando para o buffer
@@ -71,6 +78,7 @@ void HandleFile::openFile(QString in)
         _buffer.append(line);
     }
     file.close();
+    return true;
 }
 QByteArray HandleFile::getBuffer() const
 {

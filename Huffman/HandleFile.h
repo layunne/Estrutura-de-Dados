@@ -33,7 +33,7 @@ public:
     ~HandleFile();
 
     // Adiciona o Code no Arquivo de saída
-    void buildFileOut(QByteArray code, QString nameOut);
+    bool buildFileOut(QByteArray code, QString nameOut);
 
     // Constuir Caleçalho
     void buildHeader();
@@ -42,10 +42,10 @@ public:
     QByteArray getBuffer() const;
 
     // Abre o arquivo para compactação e conta as ocorrências
-    void openFile(QString in, List &list);
+    bool openFile(QString in, List &list);
 
     // Abre o arquivo para descompactação
-    void openFile(QString in);
+    bool openFile(QString in);
 
     // Imprime buffer
     void show() const;

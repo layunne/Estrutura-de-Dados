@@ -4,19 +4,6 @@ void zip(QString nameIn, QString nameOut)
 {
     qDebug() << "INICIANDO COMPACTAÇÃO\n\n";
 
-    int i = nameIn.size()-1;
-    int j = i;
-    for(; nameIn[i] != '.' && nameIn[i] != '/' && i > 0 ;--i);
-    for(; nameIn[j] != '/' && j > 0 ;--j);
-    if (nameIn[i] == '/') {
-        nameOut= nameIn;
-    } else {
-        for(++j; j < i; ++j) {
-            nameOut += nameIn[j];
-        }
-    }
-    nameOut += ".huff";
-
     DEBUGOUT("Entrada:" << nameIn)
     DEBUGOUT("Saída:" << nameOut)
 
@@ -32,8 +19,10 @@ void zip(QString nameIn, QString nameOut)
     int sizeTrash;
     int sizeTree;
 
+    codeFile.clear();
+    if(!file.buildFileOut(codeFile, nameOut)) return;
     // Lê o arquivo de entrada e Faz a contagem da ocorrência dos bytes
-    file.openFile(nameIn, list);
+    if(!file.openFile(nameIn, list)) return;
     // Gera a árvore da codificação de Huffman
     tree.buildTree(list);
     // Gera a codificação e Gera a representação da árvore
@@ -45,16 +34,6 @@ void zip(QString nameIn, QString nameOut)
     if(sizeTrash == 8) sizeTrash = 0;
     else if(sizeTrash > 8) cout << "DEU ERRO\n";
     sizeTree = tree.getcodeTree().size();
-
-
-    // Retirando o local no nameIn
-    QString temp = nameIn;
-    nameIn.clear();
-    for(i = temp.size()-1; i>=0 && temp[i] != '/'; --i);
-    for(++i; i < temp.size(); ++i){
-        nameIn.append(temp[i]);
-    }
-    DEBUGOUT("Entrada:" << nameIn)
 
     // Adiciona os dados codificados
     codeFile += decToByte(sizeTrash,sizeTree);
@@ -79,8 +58,9 @@ void unzip(QString nameIn, QString out)
     QByteArray codeFileIn;
     // Bytes do Arquivo de Saída
     QByteArray codeFileOut;
-
-
+    codeFileOut.clear();
+    // Verificando Existencia do Diretório
+    if(!file.buildFileOut(codeFileOut, "/home/layunne/git/")) return;
     //Nome do Arquivo original
     QByteArray nameFile;
 
@@ -95,7 +75,7 @@ void unzip(QString nameIn, QString out)
     int sizeName = 0;
 
     // Abre o arquivo de Entrada
-    file.openFile(nameIn);
+    if(!file.openFile(nameIn)) return;
 
     // Recebe o buffer da entrada
     codeFileIn = file.getBuffer();
@@ -154,9 +134,9 @@ void unzip(QString nameIn, QString out)
             temp = "";
         }
     }
-
+    out += nameFile;
     //Gera o arquvo de saída
-    file.buildFileOut(codeFileOut, nameFile);
+    file.buildFileOut(codeFileOut, out);
     qDebug() << "TERMINANDO DESCOMPACTAÇÃO\n";
 }
 
@@ -262,9 +242,23 @@ void help(int i)
     }
     else if(i == 2) {
         qDebug() << "-----------ATENÇÃO!!----------\n\n"
-                 << "ERRO: O ARQUIVO NÃO EXISTE OU NÃO FOI ENCONTRADO!!\n"
-                 <<  "Verifique se o nome do Arquivo está correto\n ou se está na pasta certa e tente novamente.\n"
+                 << "ERRO: O ARQUIVO/DIRETÓRIO NÃO EXISTE OU NÃO FOI ENCONTRADO!!\n"
+                 <<  "Verifique se o nome do Arquivo/Diretório está correto\n ou se está na pasta certa e tente novamente.\n"
                  <<  "Use o comando help para uma breve ajuda.\n\n";
     }
     qDebug() << "------------------------------\n";
+}
+
+
+QString editNameOut(QString name)
+{
+    QString nameOut;
+    int size = name.size();
+    int i = size-1;
+    for(; i > 0 && name[i] != '/'; --i);
+    for( ; i < size && name[i] != '.'; ++i) {
+        nameOut.append(name[i]);
+    }
+    nameOut += ".huff";
+    return nameOut;
 }
