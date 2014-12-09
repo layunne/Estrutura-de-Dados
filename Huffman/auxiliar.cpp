@@ -20,7 +20,7 @@ void zip(QString nameIn, QString nameOut)
     int sizeTree;
 
     codeFile.clear();
-    if(!file.buildFileOut(codeFile, nameOut)) return;
+//    if(!file.buildFileOut(codeFile, nameOut)) return;
     // Lê o arquivo de entrada e Faz a contagem da ocorrência dos bytes
     if(!file.openFile(nameIn, list)) return;
     // Gera a árvore da codificação de Huffman
@@ -45,7 +45,9 @@ void zip(QString nameIn, QString nameOut)
     qDebug() << "TERMINANDO COMPACTAÇÃO\n";
 }
 
-
+// ========================================UNZIP======================================== //
+// ========================================UNZIP======================================== //
+// ========================================UNZIP======================================== //
 void unzip(QString nameIn, QString out)
 {
     qDebug() << "INICIANDO DESCOMPACTAÇÃO\n\n";
@@ -60,7 +62,7 @@ void unzip(QString nameIn, QString out)
     QByteArray codeFileOut;
     codeFileOut.clear();
     // Verificando Existencia do Diretório
-    if(!file.buildFileOut(codeFileOut, "/home/layunne/git/")) return;
+//    if(!file.buildFileOut(codeFileOut, "/home/layunne/git/")) return;
     //Nome do Arquivo original
     QByteArray nameFile;
 
@@ -69,7 +71,6 @@ void unzip(QString nameIn, QString out)
 
     // Representação da Árvore
     QByteArray codeTree;
-
     int sizeTrash = 0;
     int sizeTree = 0;
     int sizeName = 0;
@@ -84,6 +85,7 @@ void unzip(QString nameIn, QString out)
     QPair<int,int> pair = byteToDecPair(codeFileIn);
     sizeTrash = pair.first;
     sizeTree = pair.second;
+
     // Remove os Dois primeiros Bytes do tamanho do Lixo e da Árvore
     codeFileIn.remove(0,1);
     codeFileIn.remove(0,1);
@@ -134,11 +136,20 @@ void unzip(QString nameIn, QString out)
             temp = "";
         }
     }
-    out += nameFile;
-    //Gera o arquvo de saída
+
+//    out += nameFile;
+//    //Gera o arquvo de saída
+//    QString test = out;
+//    out = "/home/layunne/git/";
+//    out += test;
+
     file.buildFileOut(codeFileOut, out);
     qDebug() << "TERMINANDO DESCOMPACTAÇÃO\n";
 }
+
+// ========================================UNZIP======================================== //
+// ========================================UNZIP======================================== //
+// ========================================UNZIP======================================== //
 
 
 QByteArray decToByte(int sizeTrash, int sizeTree){
