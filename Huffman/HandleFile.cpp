@@ -78,6 +78,7 @@ bool HandleFile::openFile(QString in)
     if(!file.open(QIODevice::ReadOnly)) {
         qDebug() << "O ARQUIVO NÃO EXITE";
         help(2);
+        return false;
     }
     // Lê arquivo de entrada compactado passando para o buffer
     while(!file.atEnd()) {

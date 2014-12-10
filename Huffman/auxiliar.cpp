@@ -33,6 +33,7 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     // Gera a codificação e Gera a representação da árvore
     tree.encoding(tree.getRoot());
     file.codeBody(tree.listNodes());
+    qDebug() << tree.getcodeTree();
 
     // Calcula o Tamanho do Lixo e da Árvore
     sizeTrash = 8-((file.sizeCode())%8);
@@ -67,8 +68,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
     QByteArray codeFileIn;
     // Bytes do Arquivo de Saída
     QByteArray codeFileOut;
-    // Verificando Existencia do Diretório
-//    if(!file.buildFileOut(codeFileOut, "/home/layunne/git/")) return;
+
     //Nome do Arquivo original
     QByteArray nameFile;
 
@@ -83,7 +83,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
 
     // Abre o arquivo de Entrada
     localIn+= nameIn;
-    if(!file.openFile(localIn)) return false;
+    if(!file.openFile(localIn)) return true;
 
     // Recebe o buffer da entrada
     codeFileIn = file.getBuffer();
@@ -106,11 +106,17 @@ bool unzip(QString nameIn, QString out, QString localIn)
         codeFileIn.remove(0,1);
     }
     // Decodifica a representação da Árvore de Huffman
+    int nodes = 0;
     for(int i = 0; i < sizeTree; ++i) {
-        codeTree.append((char)codeFileIn.at(0));
+        unsigned char code;
+        code = (unsigned char)codeFileIn.at(0);
+        if(codeFileIn.size() < 2) return false;
+        if((code == '(' && codeFileIn.at(1) != '(')) ++nodes;
+        codeTree.append(code);
         codeFileIn.remove(0,1);
     }
     // Verificando se o .huff é válido
+    if(codeTree.size()/2 < nodes+1) return false;
     if(codeTree.size() == 0 || (codeTree.at(0) != '(' && codeTree.at(1) != '(' && codeTree.size() > 2)) return false;
 
 

@@ -395,7 +395,7 @@ gui.o: ../gui.cpp ../gui.h \
 		../list.h \
 		../ByteArray.h \
 		../Tree.h \
-		ui_gui.h
+		../ui_gui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gui.o ../gui.cpp
 
 moc_gui.o: moc_gui.cpp 

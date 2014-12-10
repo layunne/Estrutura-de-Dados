@@ -71,7 +71,8 @@ int main(int argc, char* argv[])
                          <<" ERRO: O ARQUIVO NÃO É VÁLIDO!\n"
                          << "    O arquivo não é um .huff\n"
                          << "    Por favor, insira um arquivo do tipo .huff\n";
-                exit(1);
+                help(1);
+                return 0;
             }
         }
     }
