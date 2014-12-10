@@ -29,6 +29,12 @@ public:
     // Constroi a Arvore de Huffmam
     void buildTree(List &list);
 
+    // limpa todos os Atributos
+    void clear();
+
+    // Limpa a arvore;
+    void clearTree(Node *base);
+
     // Retorna o Código da Árvore
     QByteArray getcodeTree();
 

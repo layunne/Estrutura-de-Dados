@@ -23,6 +23,9 @@ public:
     // Insere o item na lista no final da lista
     void append(Node *node);
 
+    // limpa todos os Atributos
+    void clear();
+
     //Retorna o Primeiro vador da lista
     Node *getBegin();
 

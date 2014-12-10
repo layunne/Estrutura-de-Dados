@@ -4,6 +4,11 @@ ByteArray::ByteArray()
 {
     _byteArray = NULL;
 }
+
+ByteArray::~ByteArray()
+{
+    clear();
+}
 void ByteArray::toByteArray(QByteArray byteArray)
 {
     _byteArray = byteArray;
@@ -12,6 +17,11 @@ void ByteArray::toByteArray(QByteArray byteArray)
 void ByteArray::appendByte(char byte)
 {
     _byteArray.append(byte);
+}
+
+void ByteArray::clear()
+{
+    _byteArray.clear();
 }
 
 char ByteArray::getByte(int i)

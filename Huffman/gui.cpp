@@ -16,15 +16,42 @@ Gui::~Gui()
 void Gui::on_zipButton_clicked()
 {
     QString nameIn = ui->localInput->text();
-    QString nameOut = ui->localOutput->text();
-    if(nameIn.size() && nameOut.size()) zip(nameIn, nameOut);
+    QString nameOut = editNameOut(nameIn);
+    QString out = ui->localOutput->text();
+    if(nameIn.size() && out.size()) {
+        if(out.at(out.size()-1) != '/') out += '/';
+        if(zip(nameIn, nameOut, out)){
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Sucesso!");
+            msgBox.setText("Seu Arquivo foi comprimido com Sucesso.");
+            msgBox.exec();
+
+        }
+        else {
+        }
+
+        ui->localInput->setText("");
+    }
+
+
+
+
+
 }
 
 void Gui::on_unzipButton_clicked()
 {
     QString nameIn = ui->localInput->text();
-    QString nameOut = ui->localOutput->text();
-    if(nameIn.size() && nameOut.size()) unzip(nameIn, nameOut);
+    QString out = ui->localOutput->text();
+    if(nameIn.size() && out.size()) {
+        if(out.at(out.size()-1) != '/') out += '/';
+        unzip(nameIn, out);
+        ui->localInput->setText("");
+    }
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Sucesso!");
+    msgBox.setText("Seu Arquivo foi descomprimido com Sucesso.");
+    msgBox.exec();
 }
 void Gui::on_loadInput_clicked()
 {
@@ -36,7 +63,7 @@ void Gui::on_loadInput_clicked()
 void Gui::on_loadOutput_clicked()
 {
     QString local;
-    local = QFileDialog::getExistingDirectory(this,tr("Destino"), "/home") + "/";
+    local = QFileDialog::getExistingDirectory(this,tr("Destino"), "/home");
     ui->localOutput->setText(local);
 }
 

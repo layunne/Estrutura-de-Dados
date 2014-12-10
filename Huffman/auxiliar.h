@@ -29,13 +29,16 @@ int byteToDec(QByteArray code);
 QPair<int, int> byteToDecPair(QByteArray code);
 
 // Compreção
-void zip(QString nameIn, QString nameOut);
+bool zip(QString nameIn, QString nameOut, QString localOut = NULL);
 
 // Decompreção
-void unzip(QString nameIn, QString out = NULL);
+bool unzip(QString nameIn, QString out = NULL, QString localIn = NULL);
 
 // Retorna o nome.huff
 QString editNameOut(QString name);
+
+// Retorna o nome de entrada sem o endereço
+QString editNameIn(QString name);
 
 // Ajuda
 void help(int i = 0);

@@ -16,11 +16,16 @@ private:
     QByteArray _byteArray;
 public:
     ByteArray();
+    ~ByteArray();
 
     // Para ByteArray
     void toByteArray(QByteArray byteArray);
+
     // Adiciona um Byte na ultima Posição
     void appendByte(char byte);
+
+    // limpa todos os Atributos
+    void clear();
 
     // Retorna o char na posição dada
     char getByte(int i);

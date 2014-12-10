@@ -8,7 +8,7 @@ Tree::Tree()
 
 Tree::~Tree()
 {
-
+    clear();
 }
 
 void Tree::buildTree(List &list)
@@ -21,6 +21,25 @@ void Tree::buildTree(List &list)
         list.append(node);
     }
     _root = list.getBegin();
+}
+
+void Tree::clear()
+{
+    _codeTree.clear();
+    delete[] _listLeaf;
+    clearTree(_root);
+}
+
+void Tree::clearTree(Node *base)
+{
+    if(base == NULL) return;
+
+    clearTree(base->getLeftChild());
+    clearTree(base->getRightChild());
+    if(base->isLeaf()) {
+        delete(base);
+    }
+
 }
 
 void Tree::rebuildTree(Node *base)

@@ -14,7 +14,14 @@ HandleFile::HandleFile()
 
 HandleFile::~HandleFile()
 {
+    clear();
+}
 
+void HandleFile::clear()
+{
+    _buffer.clear();
+    _bodyFile.clear();
+    _sizeCode =  0;
 }
 
 long long int HandleFile::sizeCode() const

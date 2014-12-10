@@ -5,6 +5,7 @@
 
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <iostream>
 
 using std::cout;

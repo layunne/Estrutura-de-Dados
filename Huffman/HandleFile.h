@@ -22,8 +22,8 @@ class HandleFile
 {
 private:
     QByteArray _buffer;          // Arquivo de Entrada
-    long long int _sizeCode;     // Tamanho do código pré-codificado
     ByteArray _bodyFile;         // Corpo do Arquivo de saída - sem o cabeçalho
+    long long int _sizeCode;     // Tamanho do código pré-codificado
 
 public:
     //Construtor
@@ -31,6 +31,9 @@ public:
 
     //Destrutor
     ~HandleFile();
+
+    // limpa todos os Atributos
+    void clear();
 
     // Adiciona o Code no Arquivo de saída
     bool buildFileOut(QByteArray code, QString nameOut);

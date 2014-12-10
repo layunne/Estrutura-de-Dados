@@ -9,11 +9,16 @@ List::List()
 
 List::~List()
 {
-
+    clear();
 }
 void List::append(Node *node)
 {
     list.append(node);
+}
+
+void List::clear()
+{
+    list.clear();
 }
 
 Node *List::getBegin()
