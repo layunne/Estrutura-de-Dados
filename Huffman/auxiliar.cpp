@@ -2,11 +2,10 @@
 
 bool zip(QString nameIn, QString nameOut, QString localOut)
 {
-    qDebug() << "INICIANDO COMPACTAÇÃO\n\n";
+    qDebug() << "INICIANDO COMPACTAÇÃO\n";
 
-    DEBUGOUT("Entrada:" << nameIn)
-    DEBUGOUT("Name Out:" << nameOut)
-    DEBUGOUT("LOCAL" << localOut)
+    qDebug() << "Entrada:" << nameIn;
+    qDebug() << "Saída:" << nameOut;
 
     // Manipula o Arquivo
     HandleFile file;
@@ -20,11 +19,15 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     int sizeTrash;
     int sizeTree;
 
-    DEBUGOUT("LOCAL OUT FINAL" << localOut)
     codeFile.clear();
 //    if(!file.buildFileOut(codeFile, nameOut)) return;
     // Lê o arquivo de entrada e Faz a contagem da ocorrência dos bytes
     if(!file.openFile(nameIn, list)) return false;
+
+    if(!file.getBuffer().size()) {
+        qDebug() << "Arquivo vazio!";
+        return false;
+    }
 
     // Retida o endereço presendo no nome de entrada
     nameIn = editNameIn(nameIn);
@@ -33,7 +36,6 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     // Gera a codificação e Gera a representação da árvore
     tree.encoding(tree.getRoot());
     file.codeBody(tree.listNodes());
-    qDebug() << tree.getcodeTree();
 
     // Calcula o Tamanho do Lixo e da Árvore
     sizeTrash = 8-((file.sizeCode())%8);
@@ -48,8 +50,8 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     codeFile += tree.getcodeTree();
     codeFile += file.getCodeBody();
     localOut +=nameOut;
-    if(file.buildFileOut(codeFile, localOut)) return true;
-    else return false;
+    if(!file.buildFileOut(codeFile, localOut)) return false;
+    qDebug() << "TERMINANDO COMPACTAÇÃO\n";
     return true;
 }
 
@@ -59,8 +61,24 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
 bool unzip(QString nameIn, QString out, QString localIn)
 {
     qDebug() << "INICIANDO DESCOMPACTAÇÃO\n\n";
-    DEBUGOUT("Entrada:" << nameIn)
-    DEBUGOUT("Saída:" << out)
+
+    qDebug() << "Entrada:" << nameIn;
+
+    // Verificando se é .huff
+    QString dotHuff;
+    for(int i = nameIn.size()-5; i < nameIn.size() && i > 0; ++i) {
+        dotHuff += nameIn[i];
+    }
+
+    if(dotHuff != ".huff") {
+        qDebug() << "-----------ATENÇÃO!!----------\n\n"
+                 <<" ERRO: O ARQUIVO NÃO É VÁLIDO!\n"
+                 << "    O arquivo não é um .huff\n"
+                 << "    Por favor, insira um arquivo do tipo .huff\n";
+        help(1);
+        return false;
+    }
+
     // Manipula o Arquivo
     HandleFile file;
 
@@ -84,6 +102,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
     // Abre o arquivo de Entrada
     localIn+= nameIn;
     if(!file.openFile(localIn)) return true;
+    if(!file.getBuffer().size()) return false;
 
     // Recebe o buffer da entrada
     codeFileIn = file.getBuffer();
@@ -106,17 +125,13 @@ bool unzip(QString nameIn, QString out, QString localIn)
         codeFileIn.remove(0,1);
     }
     // Decodifica a representação da Árvore de Huffman
-    int nodes = 0;
     for(int i = 0; i < sizeTree; ++i) {
         unsigned char code;
         code = (unsigned char)codeFileIn.at(0);
-        if(codeFileIn.size() < 2) return false;
-        if((code == '(' && codeFileIn.at(1) != '(')) ++nodes;
         codeTree.append(code);
         codeFileIn.remove(0,1);
     }
     // Verificando se o .huff é válido
-    if(codeTree.size()/2 < nodes+1) return false;
     if(codeTree.size() == 0 || (codeTree.at(0) != '(' && codeTree.at(1) != '(' && codeTree.size() > 2)) return false;
 
 
@@ -124,7 +139,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
     codeFileByteArray.toByteArray(codeFileIn);
 
     for(int i = 0; i < sizeTrash ;++i){
-        if(codeFileByteArray.getBit(codeFileByteArray.size()-sizeTrash+i)) return false;
+        codeFileByteArray.getBit(codeFileByteArray.size()-sizeTrash+i);
     }
 
     // Reconstroi a Árvore de Huffman
@@ -158,13 +173,10 @@ bool unzip(QString nameIn, QString out, QString localIn)
         }
     }
     if(temp.size()) return false;
-
+    qDebug() << tree.getcodeTree();
     out += nameFile;
-//    //Gera o arquvo de saída
-//    QString test = out;
-//    out = "/home/layunne/git/";
-//    out += test;
-    file.buildFileOut(codeFileOut, out);
+    qDebug() << "Saída:" << out;
+    if(!file.buildFileOut(codeFileOut, out)) return false;
     qDebug() << "TERMINANDO DESCOMPACTAÇÃO\n";
     return true;
 }
@@ -176,39 +188,16 @@ bool unzip(QString nameIn, QString out, QString localIn)
 
 QByteArray decToByte(int sizeTrash, int sizeTree){
     ByteArray code;
+    ByteArray byteTemp;
     int temp;
     temp = sizeTree/(0x1 << 8);
     code.setByte(0,temp);
     temp = sizeTree%(0x1 << 8);
     code.setByte(1,temp);
 
-    switch (sizeTrash) {
-    case 1:
-        code.setBit(2,1);
-        break;
-    case 2:
-        code.setBit(1,1);
-        break;
-    case 3:
-        code.setBit(1,1);
-        code.setBit(2,1);
-        break;
-    case 4:
-        code.setBit(0,1);
-        break;
-    case 5:
-        code.setBit(0,1);
-        code.setBit(2,1);
-        break;
-    case 6:
-        code.setBit(0,1);
-        code.setBit(1,1);
-        break;
-    case 7:
-        code.setBit(0,1);
-        code.setBit(1,1);
-        code.setBit(2,1);
-        break;
+    byteTemp.setByte(0,sizeTrash);
+    for(int i = 0; i < 3; ++i){
+        code.setBit(i, byteTemp.getBit(5+i));
     }
     return code.getByteArray();
 }

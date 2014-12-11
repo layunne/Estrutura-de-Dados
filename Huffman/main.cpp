@@ -12,7 +12,7 @@
 using std::cout;
 int main(int argc, char* argv[])
 {
-    qDebug() << "------------COMEÇO------------";
+    qDebug() << "------------COMEÇO------------\n";
 
 
     // Passa os Argumantos para uma QList
@@ -36,43 +36,24 @@ int main(int argc, char* argv[])
         }
 
         else {
-
-            QString temp;
-
-            for(int i = arg[1].size()-5; i < arg[1].size() && i > 0; ++i) {
-                temp += arg[1][i];
-            }
-
-            if(temp == ".huff") {
                 // huffman arquivo.huff -d /home/user/destino
                 // Descompacta
-                if(argc == 4 && arg[2] == "-d")  {
-                    QString out = arg[3] ;
-                    if(out.size() && out[out.size()-1] != '/') out += '/';
-                    if(!unzip(arg[1], out)) {
-                        help(3);
-                        return 0;
-                    }
+            if(argc == 4 && arg[2] == "-d")  {
+                QString out = arg[3] ;
+                if(out.size() && out[out.size()-1] != '/') out += '/';
+                if(!unzip(arg[1], out)) {
+                    help(3);
                     return 0;
                 }
-                // huffman arquivo.huff
-                // Descompacta
-                else if(argc == 2) {
-                    if(!unzip(arg[1])) {
-                        help(3);
-                        return 0;
-                    }
-                }
-            }
-
-            else {
-
-                qDebug() << "-----------ATENÇÃO!!----------\n\n"
-                         <<" ERRO: O ARQUIVO NÃO É VÁLIDO!\n"
-                         << "    O arquivo não é um .huff\n"
-                         << "    Por favor, insira um arquivo do tipo .huff\n";
-                help(1);
                 return 0;
+            }
+            // huffman arquivo.huff
+            // Descompacta
+            else {
+                if(!unzip(arg[1])) {
+                    help(3);
+                    return 0;
+                }
             }
         }
     }

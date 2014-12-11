@@ -38,7 +38,7 @@ bool HandleFile::buildFileOut(QByteArray code, QString nameOut)
     }
     file.write(code);
     file.close();
-    qDebug() << "\nARQUIVO SALVO COM SUCESSO!\n\n";
+    qDebug() << "\nARQUIVO SALVO COM SUCESSO!\n";
     return true;
 }
 

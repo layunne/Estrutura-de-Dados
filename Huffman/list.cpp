@@ -85,12 +85,13 @@ void List::showTree(Node *base)
 bool caseInsensitiveLessThan(Node* &n1, Node* &n2)
 {
     if(n1->getWeight() == n2->getWeight()) {
-        if(!(n1->isLeaf()) && !(n2->isLeaf())) {
-            Node *temp1 = n1->getLeftChild();
-            Node *temp2 = n2->getLeftChild();
-            if(temp1->isLeaf() != temp2->isLeaf()) return true;
-            return caseInsensitiveLessThan(temp1,temp2);
-        }
+//        if(!(n1->isLeaf()) && !(n2->isLeaf())) {
+//            Node *temp1 = n1->getLeftChild();
+//            Node *temp2 = n2->getRightChild();
+//            if(temp1->isLeaf() != temp2->isLeaf()) return true;
+//            qDebug() << "EU";
+//            return caseInsensitiveLessThan(temp1,temp2);
+//        }
         return n1->getContent() < n2->getContent();
     }
     return n1->getWeight() < n2->getWeight();
