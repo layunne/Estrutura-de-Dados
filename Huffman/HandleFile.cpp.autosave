@@ -127,7 +127,7 @@ QByteArray HandleFile::rebuildFile(QByteArray codeFile, int sizeTrash, Node *roo
     ByteArray code;
     code.toByteArray(codeFile);
     QByteArray codeFileOut;
-
+    
     for(int i = 0; i < codeFile.size()*8 - sizeTrash; ++i) {
         if(code.getBit(i)) {
             curr = curr->getRightChild();

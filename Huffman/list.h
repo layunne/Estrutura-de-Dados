@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <stdlib.h>
 #include <iostream>
+#include <QtAlgorithms>
 
 #define DEBUG 1
 //#define DEBUGOUT(mensagem) if(DEBUG)std::cout << mensagem << "\n";
@@ -46,6 +47,8 @@ public:
 
     // Imprime do tipo Arvore Binaria
     void showTree(Node *base);
+
+    void reserve(int alloc);
 
     // Ordena a lista pelo Peso/Frequencia
     void sort();

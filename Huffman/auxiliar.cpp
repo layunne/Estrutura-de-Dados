@@ -98,15 +98,13 @@ bool unzip(QString nameIn, QString out, QString localIn)
     int sizeTrash = 0;
     int sizeTree = 0;
     int sizeName = 0;
-
     // Abre o arquivo de Entrada
     localIn+= nameIn;
     if(!file.openFile(localIn)) return true;
-    if(!file.getBuffer().size()) return false;
 
     // Recebe o buffer da entrada
     codeFileIn = file.getBuffer();
-
+    if(!codeFileIn.size()) return false;
     // Decodifica o tamanho do Lixo e da Árvore
     QPair<int,int> pair = byteToDecPair(codeFileIn);
     sizeTrash = pair.first;
@@ -120,6 +118,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
     sizeName = byteToDec(codeFileIn);
     codeFileIn.remove(0,1);
 
+
     for(int i = 0; i < sizeName; ++i) {
         nameFile.append(codeFileIn.at(0));
         codeFileIn.remove(0,1);
@@ -132,7 +131,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
         codeFileIn.remove(0,1);
     }
     // Verificando se o .huff é válido
-    if(codeTree.size() == 0 || (codeTree.at(0) != '(' && codeTree.at(1) != '(' && codeTree.size() > 2)) return false;
+    if(codeTree.size() == 0 || (codeTree.at(0) != 0x28 && codeTree.at(1) != 0x28 && codeTree.size() > 2)) return false;
 
 
     ByteArray codeFileByteArray;
@@ -144,6 +143,7 @@ bool unzip(QString nameIn, QString out, QString localIn)
 
     // Reconstroi a Árvore de Huffman
     Node *root = new Node(false);
+
     root->setChilds(new Node(), new Node());
     tree.setCodeTree(codeTree);
     root->getLeftChild()->setCode("0");
@@ -151,29 +151,12 @@ bool unzip(QString nameIn, QString out, QString localIn)
     tree.rebuildTree(root->getLeftChild());
     tree.rebuildTree(root->getRightChild());
     tree.setRoot(root);
-
     if(tree.getcodeTree().size() != 0) return false;
 
-    // Decodifica o Arquivo Original passando pela árvore
-    ByteArray code;
-    code.toByteArray(codeFileIn);
-    QByteArray temp;
-    QPair<unsigned char, bool> aux;
+    codeFileOut = file.rebuildFile(codeFileIn, sizeTrash, root);
 
-    for(int i = 0; i < codeFileIn.size()*8 - sizeTrash; ++i) {
-        if(code.getBit(i)) {
-            temp += '1';
-        } else {
-            temp += '0';
-        }
-        aux = tree.searchLeaf(temp, root);
-        if(aux.second) {
-            codeFileOut.append(aux.first);
-            temp = "";
-        }
-    }
-    if(temp.size()) return false;
-    qDebug() << tree.getcodeTree();
+    if(!codeFileOut.size()) return false;
+//    qDebug() << tree.getcodeTree();
     out += nameFile;
     qDebug() << "Saída:" << out;
     if(!file.buildFileOut(codeFileOut, out)) return false;
@@ -311,4 +294,17 @@ QString editNameIn(QString name){
         nameIn.append(name[i]);
     }
     return nameIn;
+}
+
+long long int strBinaryToint(QString codeLiaf){
+    long long int code = 0;
+    long long int sizeCode = codeLiaf.size() -1;
+    for(int i = sizeCode; i>=0; --i){
+        long long int mask = 0;
+        if(codeLiaf[i] == '1'){
+            mask = 0x1 << (sizeCode-i);
+        }
+        code += mask;
+    }
+    return code;
 }

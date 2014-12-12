@@ -10,6 +10,7 @@
 #include <QByteArray>
 #include <QPair>
 #include <iostream>
+#include <QList>
 
 using std::cout;
 #define DEBUG 1
@@ -21,8 +22,7 @@ class Tree
 private:
     Node *_root;            // Raiz da Árvora de Huffman
     QByteArray _codeTree;   // Código da Árvore de Huffman para compactação
-    QString *_listLeaf;     // Lista das Folhas com seus Respectivos Códigos _listLeaf[content] = code
-
+    QList<QString> _listLeaf;     // Lista das Folhas com seus Respectivos Códigos _listLeaf[content] = code
 public:
     Tree();
     ~Tree();
@@ -39,7 +39,7 @@ public:
     QByteArray getcodeTree();
 
     //Retorna o Código do Corpo
-    QString *listNodes();
+    QList<QString> &listNodes();
 
     // Retorna a Raiz da Árvore de Huffman
     Node *getRoot();
@@ -71,7 +71,13 @@ public:
     // Imprime Cófigo da árvore de huffmam
     void showCodeTree();
 
+    void listLeafAlloc();
 
+
+    QList<QString> &getListLeaf();
+    void setListLeaf(QList<QString> &listLeaf);
+    QByteArray *searchLeaf(QByteArray *code, int iBit, int sizeTrash, Node *base, Node *root, QByteArray *codeFile);
 };
+
 
 #endif // TREE_HPP

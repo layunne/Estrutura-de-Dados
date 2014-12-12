@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QList>
 #include <QByteArray>
+#include <QtAlgorithms>
 #include <QString>
 #include <QFile>
 #include <QPair>
@@ -40,8 +41,11 @@ QString editNameOut(QString name);
 // Retorna o nome de entrada sem o endereço
 QString editNameIn(QString name);
 
+// Retorna o balor em decimal correnpondente ao código da folha
+long long strBinaryToint(QString codeLiaf);
+
 // Ajuda
 void help(int i = 0);
 
-
+//void recodeFile(Node *base, QByteArray code, );
 #endif // AUXILIAR_H

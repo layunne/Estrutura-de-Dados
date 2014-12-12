@@ -82,6 +82,11 @@ void List::showTree(Node *base)
     showTree(base->getRightChild());
 }
 
+void List::reserve(int alloc)
+{
+    list.reserve(alloc);
+}
+
 bool caseInsensitiveLessThan(Node* &n1, Node* &n2)
 {
     if(n1->getWeight() == n2->getWeight()) {

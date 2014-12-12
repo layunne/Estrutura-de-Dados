@@ -5,6 +5,7 @@
 #include "list.h"
 #include "auxiliar.h"
 #include "ByteArray.h"
+#include "Tree.h"
 
 #include <QList>
 #include <QString>
@@ -54,13 +55,15 @@ public:
     void show() const;
 
     // Geta o arquivo pré-codificado
-    void codeBody(QString *list);
+    void codeBody(QList<QString> list);
 
     // Retorna o Corpo do Árquivo
     QByteArray getCodeBody();
 
     // Tamanho do Código
     long long sizeCode() const;
+
+    QByteArray rebuildFile(QByteArray codeFile, int sizeTrash, Node *root);
 };
 
 #endif // HANDLEFILE_H

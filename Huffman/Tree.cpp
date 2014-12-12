@@ -1,9 +1,21 @@
 #include "Tree.h"
 
+
+
+
+QList<QString> &Tree::getListLeaf()
+{
+    return _listLeaf;
+}
+
+void Tree::setListLeaf(QList<QString> &listLeaf)
+{
+    _listLeaf = listLeaf;
+}
 Tree::Tree()
 {
     _root = NULL;
-    _listLeaf = new QString[256];
+    listLeafAlloc();
 }
 
 Tree::~Tree()
@@ -26,8 +38,7 @@ void Tree::buildTree(List &list)
 void Tree::clear()
 {
     _codeTree.clear();
-    delete[] _listLeaf;
-    clearTree(_root);
+    _listLeaf.clear();
 }
 
 void Tree::clearTree(Node *base)
@@ -47,18 +58,18 @@ void Tree::rebuildTree(Node *base)
     bool verificador = true;
     if(!_codeTree.size()) return;
 
-    if(_codeTree.at(0) == '#') {
+    if(_codeTree.at(0) == 0x23) {
         _codeTree.remove(0,1);
         verificador = false;
 
     }
 
-    if(_codeTree.at(0) == '('  && verificador) {
+    if(_codeTree.at(0) == 0x28  && verificador) {
         _codeTree.remove(0,1);
         base->setIsLeaf(false);
         base->setChilds(new Node(), new Node());
-        base->getLeftChild()->setCode(base->getCode() + "0");
-        base->getRightChild()->setCode(base->getCode() + "1");
+        base->getLeftChild()->setCode(base->getCode() + '0');
+        base->getRightChild()->setCode(base->getCode() + '1');
         rebuildTree(base->getLeftChild());
         rebuildTree(base->getRightChild());
     } else {
@@ -82,23 +93,57 @@ QPair<unsigned char, bool> Tree::searchLeaf(QString codeLeaf, Node *base)
             else codeLeaf[0] = '2';
             return searchLeaf(codeLeaf, base->getRightChild());
         } else {
-
             return QPair<unsigned char, bool> (base->getContent(),false);
         }
     }
     return QPair<unsigned char, bool> (base->getContent(),base->isLeaf());
 }
 
+QByteArray *Tree::searchLeaf(QByteArray *code, int iBit, int sizeTrash, Node *base, Node *root, QByteArray *codeFile)
+{
+    if(base->isLeaf()) {
+//        qDebug() << (char)base->getContent();
+        codeFile->append((unsigned char)base->getContent());
+        return searchLeaf(code, iBit, sizeTrash, root, root, codeFile);
+    }
+    else {
+        ByteArray byte;
+        if(iBit == 8) {
+            code->remove(0, 1);
+            iBit = 0;
+        }
+        if(!code->size() || (code->size() == 1 && sizeTrash && 8 - sizeTrash <= iBit)) return codeFile;
+        byte.appendByte(code->at(0));
+        if(byte.getBit(iBit)) {
+            return searchLeaf(code, ++iBit, sizeTrash, base->getRightChild(), root, codeFile);
+        }
+        else {
+            return searchLeaf(code, ++iBit, sizeTrash, base->getLeftChild(), root, codeFile);
+        }
+    }
+    return codeFile;
+}
+
+
+
 void Tree::showCodeTree()
 {
-   DEBUGOUT(_codeTree)
+    qDebug() <<_codeTree;
+}
+
+void Tree::listLeafAlloc()
+{
+    _listLeaf.clear();
+    for(int i = 0; i < 256; ++i){
+        _listLeaf.append(0);
+    }
 }
 QByteArray Tree::getcodeTree()
 {
     return _codeTree;
 }
 
-QString *Tree::listNodes()
+QList<QString> &Tree::listNodes()
 {
     return _listLeaf;
 }
@@ -120,7 +165,7 @@ void Tree::encoding(Node *base)
         _codeTree += "(";
     }
     else if(base->isLeaf()) {
-        if(base->getContent() == '(' || base->getContent() == '#') _codeTree += '#';
+        if(base->getContent() == 0x28 || base->getContent() == 0x23) _codeTree += 0x23;
         _codeTree += base->getContent();
     }
 
@@ -182,5 +227,6 @@ void Tree::showTree(Node *base)
     showTree(base->getLeftChild());
     showTree(base->getRightChild());
 }
+
 
 
