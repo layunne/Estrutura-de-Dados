@@ -7,21 +7,15 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     qDebug() << "Entrada:" << nameIn;
     qDebug() << "Saída:" << nameOut;
 
-    // Manipula o Arquivo
-    HandleFile file;
-    // Lista que Contém os Nós que fomaram a Árvore de Huffman
-    List list;
-    // Árvore de Hufman
-    Tree tree;
-    // Binários do Arquivo de Saída
-    QByteArray codeFile;
 
+    HandleFile file;                                // Manipula o Arquivo
+    List list;                                      // Lista que Contém os Nós que fomaram a Árvore de Huffman
+    Tree tree;                                      // Árvore de Hufman
+    QByteArray codeFile;                            // Binários do Arquivo de Saída
     int sizeTrash;
     int sizeTree;
 
-    codeFile.clear();
-//    if(!file.buildFileOut(codeFile, nameOut)) return;
-    // Lê o arquivo de entrada e Faz a contagem da ocorrência dos bytes
+    // Lê o arquivo de entrada e Faz a contagem das ocorrências dos bytes
     if(!file.openFile(nameIn, list)) return false;
 
     if(!file.getBuffer().size()) {
@@ -29,12 +23,9 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
         return false;
     }
 
-    // Retida o endereço presendo no nome de entrada
-    nameIn = editNameIn(nameIn);
-    // Gera a árvore da codificação de Huffman
-    tree.buildTree(list);
-    // Gera a codificação e Gera a representação da árvore
-    tree.encoding(tree.getRoot());
+    nameIn = editNameIn(nameIn);                    // Retida o endereço presendo no nome de entrada
+    tree.buildTree(list);                           // Gera a árvore da codificação de Huffman
+    tree.encoding(tree.getRoot());                  // Gera a codificação e Gera a representação da árvore
     file.codeBody(tree.listNodes());
 
     // Calcula o Tamanho do Lixo e da Árvore
@@ -238,7 +229,11 @@ void help(int i)
         out +=   "$> huffman arquivo.huff -d /home/user/destino\n";
         out +=   "   Descomprime o arquivo \"arquivo.huff\" na pasta “/home/user/destino\"\n    com o nome original\n\n";
         out +=   "$> huffman --gui\n";
-        out +=   "   Inicia a Interface gráfica";
+        out +=   "   Inicia a Interface gráfica\n\n";
+        out +=   "$> huffman -c2 arquivo.x\n";
+        out +=   "   Dupla Compressão\n\n";
+        out +=   "$> huffman -d2 arquivo.huff\n";
+        out +=   "   Dupla Descompressão\n\n";
         qDebug() << out;
     }
     else if(i == 1) {

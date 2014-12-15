@@ -34,7 +34,6 @@ int main(int argc, char* argv[])
             w.show();
             return a.exec();
         }
-
         else {
                 // huffman arquivo.huff -d /home/user/destino
                 // Descompacta
@@ -55,6 +54,33 @@ int main(int argc, char* argv[])
                     return 0;
                 }
             }
+        }
+    }
+    // huffman -c2 arquivo.x
+    // Dupla compressão
+    else if(argc == 3 && arg[1] == "-c2") {
+        QString nameOut;
+        QString nameIn = arg[2];
+        nameOut = editNameOut(nameIn);
+        if(!zip(nameIn, nameOut)) {
+            help(4);
+            return 0;
+        }
+        if(!zip(nameOut, nameOut)) {
+            help(4);
+            return 0;
+        }
+    }
+    // huffman -d2 arquivo.huff
+    // Dupla descompressão
+    else if(argc == 3 && arg[1] == "-d2") {
+        if(!unzip(arg[2])) {
+            help(3);
+            return 0;
+        }
+        if(!unzip(arg[2])) {
+            help(3);
+            return 0;
         }
     }
 

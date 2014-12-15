@@ -36,7 +36,6 @@ bool HandleFile::buildFileOut(QByteArray code, QString nameOut)
         help(2);
         return false;
     }
-    if(code.size() < 20)qDebug() << code;
     file.write(code);
     file.close();
     qDebug() << "\nARQUIVO SALVO COM SUCESSO!\n";
@@ -127,8 +126,9 @@ QByteArray HandleFile::rebuildFile(QByteArray codeFile, int sizeTrash, Node *roo
     ByteArray code;
     code.toByteArray(codeFile);
     QByteArray codeFileOut;
+    long long int sizeCode = codeFile.size();
 
-    for(int i = 0; i < codeFile.size()*8 - sizeTrash; ++i) {
+    for(long long int i = 0; i < sizeCode*8 - sizeTrash; ++i) {
         if(code.getBit(i)) {
             curr = curr->getRightChild();
         } else {
