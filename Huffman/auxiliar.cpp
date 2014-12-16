@@ -42,6 +42,7 @@ bool zip(QString nameIn, QString nameOut, QString localOut)
     codeFile += file.getCodeBody();
     localOut +=nameOut;
     if(!file.buildFileOut(codeFile, localOut)) return false;
+    tree.showCodeLeaf(tree.getRoot());
     qDebug() << "TERMINANDO COMPACTAÇÃO\n";
     return true;
 }
