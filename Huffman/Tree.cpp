@@ -27,7 +27,7 @@ void Tree::buildTree(List &list)
 {
     while(list.size() > 1) {
         list.sort();
-        Node *node = new Node(false, 0, 0);
+        Node *node = new Node(false, 0, 0xFF);
         node->setWeight(list.getValue(0)->getWeight() + list.getValue(1)->getWeight());
         node->setChilds(list.remove(0),list.remove(1));
         list.append(node);
