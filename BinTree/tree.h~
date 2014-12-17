@@ -23,6 +23,7 @@ class Tree : public BinTree<E> {
         if(base == 0) return;
         tree += "(";
         tree += QString::number(base->content);
+//        qDebug() << base->content;
         show(base->left, tree);
         show(base->right, tree);
         tree += ")";
@@ -165,16 +166,22 @@ public:
     Tree() {
         reset();
     }
+
     ~Tree() {
         reset();
     }
+    
     void clear() {
         clear(_root);
         reset();
     }
+
     void remove(const E item){
         delete(remove2(item));
     }
+
+
+
     void add(const E& item) {
         if(_root == 0) {
             _root = new Node<E>(item);
@@ -206,12 +213,18 @@ public:
     int countLevel() const {
         return countLevel(_root, _curr);
     }
+
+
+
+
+
     int height() const {
         return height(_root);
     }
     int countLeaf() const {
         return countLeaf(_root);
     }
+
     void toLeft() {
         if(_curr->left) {
             _curr = _curr->left;
@@ -239,20 +252,27 @@ public:
         }
         return 0;
     }
+
     QString toString() {
 
         int height = 0;
         QString str;
         str +="\n";
         int numberSpace = this->height()+1;
+//        qDebug() << this->height() << numberSpace;
+
+//        str += QString(" ").repeated(14);
         while(height < this->height()){
             str += QString(" ").repeated((1 << (numberSpace-1))-2);
             toString(_root, str, height, numberSpace--);
             str +="\n";
+
+
             ++height;
         }
         return str;
     }
+
     void toString(Node<E> *base, QString &str, int height, int numberSpace) {
         if(base == 0) {
             str += "xx";
@@ -267,11 +287,13 @@ public:
         if(base == 0) toString(base, str, height-1, numberSpace);
         return;
     }
+
     void addSubTree(Node<E> *&node){
         if(_root == 0) {
             _root = node;
         }
     }
+
     void show() {
         qDebug() << "-----SHOW-----";
         QString tree;
